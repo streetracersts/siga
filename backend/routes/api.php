@@ -37,6 +37,7 @@ header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Autho
 Route::resource('/tipopessoa', 'TipoPessoaController');
 Route::resource('/tiposervico', 'TipoServicoController');
 Route::resource('/pessoa', 'PessoaController');
+Route::resource("/navios", "NavioController");
 Route::post('cadastrapessoa', 'PessoaController@store');
 Route::post('cadastratipopessoa', 'TipoPessoaController@store');
 Route::post('excluitipopessoa', 'TipoPessoaController@destroy');
@@ -44,5 +45,6 @@ Route::post('cadastracontato', 'ContatoController@store');
 Route::post('cadastraos' , 'OsController@store');
 Route::post('cadastranavio' , 'NavioController@store');
 Route::post('cadastratiposervico', 'TipoServicoController@store');
+
 
 

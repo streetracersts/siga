@@ -21,7 +21,7 @@
                 </tr>
                 <tr v-for="(item, index) in lista" v-bind:key="item.id">
                   <td>{{ index + 1 }}</td>
-                  <td>{{ item.nome }}</td>
+                  <td>{{ item.nome_navio }}</td>
                   <td>{{ item.bandeira }}</td>
                   <td>{{ item.porto_registro }}</td>
                   <td>
@@ -46,14 +46,14 @@
             <h4 class="modal-title">ADICIONAR NAVIO</h4>
           </div>
           <div class="modal-body">
-            <div class="alert alert-danger" v-if="msgs.length > 0">
+            <!-- <div class="alert alert-danger" v-if="msgs.length > 0">
               <p v-for="msg in msgs" v-bind:key="msg">{{ msg }}</p>
-            </div>
+            </div> -->
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="tipo">Nome do Navio:</label>
-                  <input type="text" name="nome" id="nome" class="form-control" v-model="navio.nome"
+                  <input type="text" name="nome" id="nome" class="form-control" v-model="navio.nome_navio"
                     @keyup.13="adicionaNavio" v-validate="'required'" />
                   <span>{{ errors.first('nome') }}</span>
                 </div>
@@ -90,15 +90,17 @@ export default {
     return {
       inativo: true,
       navio: {
-        id: "",
-        tipo: ""
+        id: '',
+        nome_navio: '',
+        bandeira: '',
+        porto_registro: ''
       },
       lista: [],
       msgs: []
     };
   },
   mounted() {
-    this.exibeTipo_servico();
+    //this.exibeTipo_servico();
     this.$nextTick(function () {
       window.addEventListener("keyup", event => {
         if (event.keyCode === 187) {
@@ -108,17 +110,18 @@ export default {
     });
   },
   computed:{
-    ativarBotao() {
-      if (this.navio.nome.length > 3 && this.navio.bandeira){
-        return (this.inativo <= false)
-      }
-      return (this.inativo <= true)
-    }
+    // ativarBotao() {
+    //   if (this.navio.nome.length > 3 && this.navio.bandeira){
+    //     return (this.inativo <= false)
+    //   }
+    //   return (this.inativo <= true)
+    // }
   },
   methods: {
     exibeNavios() {
       axios.get("http://localhost:8000/api/navios").then(response => {
-        this.lista = response.data;
+        console.log(response);
+        //this.lista = response.data;
       });
     },
     abreFormAdicionar() {
@@ -130,8 +133,9 @@ export default {
     adicionaNavio() {
       axios
         .post("http://localhost:8000/api/navios", {
-          tipo: this.navio.tipo,
-          descricao: this.navio.descricao
+          nome_navio: this.navio.nome_navio,
+          bandeira: this.navio.bandeira,
+          porto_registro: this.navio.porto_registro
         })
         .then(response => {
           this.lista.push(response.data);

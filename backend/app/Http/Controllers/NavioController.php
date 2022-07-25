@@ -49,7 +49,6 @@ class NavioController extends Controller
             //'user_id'     => Auth::user()->id
         ]);
         return response()->json([
-            'navio'    => $navio,
             'message' => 'Navio cadastrado'
         ], 200);
     }
