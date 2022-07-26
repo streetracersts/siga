@@ -19,7 +19,8 @@ class PessoaController extends Controller
     {        
         {return response()->json(
             Pessoa::all());
-        }}
+        }
+    }
 
     /**
      * Show the form for creating a new resource.

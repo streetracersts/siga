@@ -407,7 +407,7 @@ export default {
         .then(response => {
           this.msgs.push(response.data.apelido + ' cadastrado(a) com sucesso!')
           this.lista.push(response.data);
-          this.reset();
+          this.limpaCampos();
         })
         .catch(error => {
           this.msgs.push(error.response.data.errors);
@@ -424,16 +424,6 @@ export default {
           })
           .catch(error => { });
       }
-    },
-    reset() {
-      const keys = Object.keys(this.pessoa);
-      keys.forEach(key => this.pessoa[key] = '');
-      this.esconde_alerta();
-    },
-    esconde_alerta(){
-      setTimeout(() => {
-         $(".alert").alert('close')
-      }, 7000);
     },
     exibePessoas() {
       axios.get("http://localhost:8000/api/pessoa").then(response => {
@@ -485,9 +475,15 @@ export default {
         });
     },
     limpaCampos() {
-      this.errors.clear();
-      this.tiposervico.tipo = '';
+      const keys = Object.keys(this.pessoa);
+      keys.forEach(key => this.pessoa[key] = '');
+      this.esconde_alerta();
       $("#tipo").trigger("focus");
+    },
+    esconde_alerta(){
+      setTimeout(() => {
+          $(".alert").alert('close')
+      }, 7000);
     },
     fecharModal() {
       this.reset();

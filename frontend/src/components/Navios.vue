@@ -14,16 +14,16 @@
               <tbody>
                 <tr>
                   <th></th>
-                  <th>Nome </th>
+                  <th>Navio </th>
                   <th>Bandeira</th>
                   <th>Porto de Registro</th>
                   <td></td>
                 </tr>
-                <tr v-for="(item, index) in lista" v-bind:key="item.id">
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ item.nome_navio }}</td>
-                  <td>{{ item.bandeira }}</td>
-                  <td>{{ item.porto_registro }}</td>
+                <tr v-for="(navio, index) in lista" v-bind:key="navio.id">
+                  <td>{{ navio.id}}</td>
+                  <td>{{ navio.nome }}</td>
+                  <td>{{ navio.bandeira }}</td>
+                  <td>{{ navio.porto_registro }}</td>
                   <td>
                     <button v-on:click="excluiNavio(index)" class="btn btn-danger btn-xs">
                       Excluir
@@ -46,14 +46,14 @@
             <h4 class="modal-title">ADICIONAR NAVIO</h4>
           </div>
           <div class="modal-body">
-            <!-- <div class="alert alert-danger" v-if="msgs.length > 0">
+            <div class="alert alert-danger" v-if="msgs.length > 0">
               <p v-for="msg in msgs" v-bind:key="msg">{{ msg }}</p>
-            </div> -->
+            </div>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="tipo">Nome do Navio:</label>
-                  <input type="text" name="nome" id="nome" class="form-control" v-model="navio.nome_navio"
+                  <input type="text" name="nome" id="nome" class="form-control" v-model="navio.nome"
                     @keyup.13="adicionaNavio" v-validate="'required'" />
                   <span>{{ errors.first('nome') }}</span>
                 </div>
@@ -91,7 +91,7 @@ export default {
       inativo: true,
       navio: {
         id: '',
-        nome_navio: '',
+        nome: '',
         bandeira: '',
         porto_registro: ''
       },
@@ -100,7 +100,6 @@ export default {
     };
   },
   mounted() {
-    //this.exibeTipo_servico();
     this.$nextTick(function () {
       window.addEventListener("keyup", event => {
         if (event.keyCode === 187) {
@@ -108,20 +107,21 @@ export default {
         }
       });
     });
+    this.exibeNavios();
   },
   computed:{
-    // ativarBotao() {
-    //   if (this.navio.nome.length > 3 && this.navio.bandeira){
-    //     return (this.inativo <= false)
-    //   }
-    //   return (this.inativo <= true)
-    // }
+    ativarBotao() {
+      if (this.navio.nome.length > 3 && this.navio.bandeira){
+        return (this.inativo <= false)
+      }
+      return (this.inativo <= true)
+    }
   },
   methods: {
     exibeNavios() {
       axios.get("http://localhost:8000/api/navios").then(response => {
-        console.log(response);
-        //this.lista = response.data;
+        this.lista = response.data;
+        console.log(this.lista);
       });
     },
     abreFormAdicionar() {
@@ -133,13 +133,13 @@ export default {
     adicionaNavio() {
       axios
         .post("http://localhost:8000/api/navios", {
-          nome_navio: this.navio.nome_navio,
+          nome: this.navio.nome,
           bandeira: this.navio.bandeira,
           porto_registro: this.navio.porto_registro
         })
         .then(response => {
           this.lista.push(response.data);
-          this.msgs.push(response.data.tipo +' cadastrado com sucesso!');
+          this.msgs.push(response.data.nome +' cadastrado com sucesso!');
           this.limpaCampos();
         })
         .catch(error => {
@@ -148,7 +148,7 @@ export default {
     },
     excluiNavio(index) {
       let conf = confirm(
-        "Deseja realmente excluir " + this.lista[index].tipo + "?"
+        "Deseja realmente excluir " + this.lista[index].nome + "?"
       );
       if (conf === true) {
         axios.delete(
@@ -161,9 +161,16 @@ export default {
       }
     },
     limpaCampos() {
-      this.errors.clear();
-      this.navio.tipo = '';
-      $("#tipo").trigger("focus");
+        const keys = Object.keys(this.navio);
+        keys.forEach(key => this.navio[key] = '');
+        this.esconde_alerta();
+        this.errors = '';
+        $("#nome").trigger("focus");
+    },
+    esconde_alerta(){
+      setTimeout(() => {
+          $(".alert").alert('close')
+      }, 7000);
     },
     fecharModal() {
       this.limpaCampos();

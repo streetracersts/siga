@@ -14,10 +14,9 @@ class NavioController extends Controller
      */
     public function index()
     {
-        $navios = Navio::All();
-        return response()->json([
-            'navios' => $navios,
-        ], 200);
+        {return response()->json(
+            Navio::all());
+        }
     }
 
     /**
@@ -42,15 +41,8 @@ class NavioController extends Controller
             'nome' => 'required|max:255',
             'bandeira' => 'required|max:50'
         ]);
-        $navio = Navio::create([
-            'nome' => request('nome'),
-            'bandeira' => request('bandeira'),
-            'porto_registro' => request('porto_registro')
-            //'user_id'     => Auth::user()->id
-        ]);
-        return response()->json([
-            'message' => 'Navio cadastrado'
-        ], 200);
+        $navio = Navio::create($request->all());
+        return response()->json($navio, 200);
     }
 
     /**
