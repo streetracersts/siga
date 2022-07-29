@@ -64,10 +64,10 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h4 class="modal-title">ADICIONAR PESSOA</h4>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">ADICIONAR PESSOA</h4>
           </div>
           <div class="modal-body">
             <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="msgs.length > 0">
@@ -89,65 +89,91 @@
                     v-validate="'required'" />
                   <span>{{ errors.first('apelido') }}</span>
                 </div>
+              </div>
+              <div class="col-md-6">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="nome_razao">Nome completo ou Razão Social:</label>
                   <input type="text" name="nome_razao" id="nome_razao" placeholder class="form-control"
                     v-model="pessoa.nome_razao" />
                 </div>
+              </div>
+              <div class="col-md-2">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="cep">CEP:</label>
                   <input type="text" name="cep" id="cep" placeholder="_____-___" class="form-control"
                     v-model="pessoa.cep" @blur="buscaCep" v-mask="'#####-###'" />
                 </div>
+              </div>
+              <div class="col-md-6">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="endereco">Endereço:</label>
                   <input type="text" name="endereco" id="endereco" placeholder class="form-control"
                     v-model="pessoa.endereco" />
                 </div>
+              </div>
+              <div class="col-md-2">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="numero">Número:</label>
                   <input type="text" name="numero" id="numero" placeholder class="form-control"
                     v-model="pessoa.numero" />
                 </div>
+              </div>
+              <div class="col-md-2">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="complemento">Complemento:</label>
                   <input type="text" name="complemento" id="complemento" placeholder class="form-control"
                     v-model="pessoa.complemento" />
                 </div>
+              </div>
+              <div class="col-md-3">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="bairro">Bairro:</label>
                   <input type="text" name="bairro" id="bairro" placeholder class="form-control"
                     v-model="pessoa.bairro" />
                 </div>
+              </div>
+              <div class="col-md-4">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="cidade">Cidade:</label>
                   <input type="text" name="cidade" id="cidade" placeholder class="form-control"
                     v-model="pessoa.cidade" />
                 </div>
+              </div>
+              <div class="col-md-2">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="uf">UF:</label>
                   <input type="text" name="uf" id="uf" placeholder="" class="form-control" v-model="pessoa.uf" />
                 </div>
+              </div>
+              <div class="col-md-3">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="pais">País:</label>
                   <input type="text" name="pais" id="pais" placeholder="" class="form-control" v-model="pessoa.pais" />
                 </div>
+              </div>
+              <div class="col-md-3">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="telefone">Telefone: *</label>
                   <input type="text" name="telefone" id="telefone" placeholder="()____-____" class="form-control"
                     v-model="pessoa.telefone1" v-validate="'required'" v-mask="['(##)####-####', '(##)#####-####']" />
                   <span>{{ errors.first('telefone') }}</span>
                 </div>
+              </div>
+              <div class="col-md-3">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="telefone2">Telefone 2:</label>
                   <input type="text" name="telefone2" id="telefone2" placeholder="()____-____" class="form-control"
                     v-model="pessoa.telefone2" v-mask="['(##)####-####', '(##)#####-####']" />
                 </div>
+              </div>
+              <div class="col-md-6">
                 <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
                   <label for="email">Email:</label>
                   <input type="text" name="email" id="email" placeholder="email@domínio" class="form-control"
                     v-model="pessoa.email" v-validate="'email'" />
                 </div>
+              </div>
+              <!--div>
                 <span>{{ errors.first('email') }}</span>
                 <div v-if="tipopessoa.id_tipo_pessoa === 1" class="form-group">
                   <label for="cnpj">CNPJ:</label>
@@ -231,12 +257,12 @@
                   <label for="observacoes">Observações Gerais:</label>
                   <textarea name="observacoes" id="observacoes" cols="30" rows="5" class="form-control"
                     placeholder="Observações Gerais" v-model="pessoa.observacoes"></textarea>
-                </div>
-              </div>
+                </div> -->
+              <!--/div-->
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" @click="reset" @keyup.27="fecharModal" class="btn btn-default"
+            <button type="button" @click="limpaCampos" @keyup.27="limpaCampos" class="btn btn-default"
               data-dismiss="modal">Cancelar</button>
             <button type="button" @click="adicionaPessoa" @keyup.13="adicionaPessoa" class="btn btn-primary"
               :disabled="ativarBotao">Salvar</button>
@@ -272,7 +298,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            <button type="button" @keyup.13="adicionaPessoa" @click="atualizaPessoa" class="btn btn-primary">Salvar</button>
+            <button type="button" @keyup.13="adicionaPessoa" @click="atualizaPessoa"
+              class="btn btn-primary">Salvar</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -408,6 +435,7 @@ export default {
           this.msgs.push(response.data.apelido + ' cadastrado(a) com sucesso!')
           this.lista.push(response.data);
           this.limpaCampos();
+          $("#tipo").trigger("focus");
         })
         .catch(error => {
           this.msgs.push(error.response.data.errors);
@@ -477,16 +505,18 @@ export default {
     limpaCampos() {
       const keys = Object.keys(this.pessoa);
       keys.forEach(key => this.pessoa[key] = '');
+      this.tipopessoa.id_tipo_pessoa = 0;
       this.esconde_alerta();
-      $("#tipo").trigger("focus");
+      this.errors.clear();
+      $('.form-control.invalido').removeClass('invalido');
     },
-    esconde_alerta(){
+    esconde_alerta() {
       setTimeout(() => {
-          $(".alert").alert('close')
+        $(".alert").alert('close')
       }, 7000);
     },
     fecharModal() {
-      this.reset();
+      this.limpaCampos();
       $("#modal_novo").modal("hide");
     }
   }

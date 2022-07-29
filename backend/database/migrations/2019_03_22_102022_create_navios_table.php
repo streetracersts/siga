@@ -15,9 +15,9 @@ class CreateNaviosTable extends Migration
     {
         Schema::create('navios', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nome');
+            $table->string('nome')->unique();
             $table->string('bandeira');
-            $table->string('porto_registro');            
+            $table->string('porto_registro');          
             $table->timestamps();
         });
     }

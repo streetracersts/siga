@@ -76,7 +76,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" @click="fecharModal" @leyup.27="fecharModal" class="btn btn-default">Cancelar</button>
+            <button type="button" @click="fecharModal" @keyup.27="fecharModal" class="btn btn-default">Cancelar</button>
             <button type="button" @click="adicionaTipoPessoa" class="btn btn-primary" :disabled="ativarBotao">Salvar</button>
           </div>
         </div>
@@ -141,6 +141,7 @@ export default {
           this.lista.push(response.data);
           this.msgs.push(response.data.tipo +' cadastrado com sucesso!')
           this.limpaCampos();
+          $("#tipo").trigger("focus");
         })
         .catch(error => {
           this.msgs.push(error.response.data.errors);
@@ -162,9 +163,15 @@ export default {
       }
     },
     limpaCampos() {
+      this.esconde_alerta();
       this.errors.clear();
       this.tipopessoa.tipo = '';
-      $("#tipo").trigger("focus");
+      $('.form-control.invalido').removeClass('invalido');
+    },
+    esconde_alerta(){
+      setTimeout(() => {
+          $(".alert").alert('close')
+      }, 7000);
     },
     fecharModal(){
       this.limpaCampos();
