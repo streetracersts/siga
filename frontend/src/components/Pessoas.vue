@@ -82,30 +82,46 @@
                   </select>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
+              <div v-if="tipopessoa.id_tipo_pessoa > 0" class="col-md-6">
+                <div class="form-group">
                   <label for="apelido">Apelido ou nome fantasia: *</label>
                   <input type="text" name="apelido" id="apelido" class="form-control" v-model="pessoa.apelido"
                     v-validate="'required'" />
                   <span>{{ errors.first('apelido') }}</span>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
+              <div v-if="tipopessoa.id_tipo_pessoa > 0" class="col-md-6">
+                <div class="form-group">
                   <label for="nome_razao">Nome completo ou Razão Social:</label>
                   <input type="text" name="nome_razao" id="nome_razao" placeholder class="form-control"
                     v-model="pessoa.nome_razao" />
                 </div>
               </div>
-              <div class="col-md-2">
-                <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
+              <div v-if="tipopessoa.id_tipo_pessoa === 1" class="col-md-6">
+                <div class="form-group">
+                  <label for="cnpj">CNPJ:</label>
+                  <input type="text" name="cnpj" id="cnpj" placeholder="__.___.___-_____/__" class="form-control"
+                    v-model="pessoa.cnpj" v-mask="'##.###.###/####-##'" />
+                  <span>{{ errors.field }}</span>
+                </div>
+              </div>
+              <div v-if="tipopessoa.id_tipo_pessoa >= 2" class="col-md-6">
+                <div class="form-group">
+                  <label for="cpf">CPF:</label>
+                  <input type="text" name="cpf" id="cpf" placeholder="___.___.___-__" class="form-control"
+                    v-model="pessoa.cpf" v-mask="'###.###.###-##'" />
+                  <span>{{ errors.field }}</span>
+                </div>
+              </div>
+              <div v-if="tipopessoa.id_tipo_pessoa > 0" class="col-md-2">
+                <div class="form-group">
                   <label for="cep">CEP:</label>
                   <input type="text" name="cep" id="cep" placeholder="_____-___" class="form-control"
                     v-model="pessoa.cep" @blur="buscaCep" v-mask="'#####-###'" />
                 </div>
               </div>
-              <div class="col-md-6">
-                <div v-if="tipopessoa.id_tipo_pessoa > 0" class="form-group">
+              <div v-if="tipopessoa.id_tipo_pessoa > 0" class="col-md-6">
+                <div class="form-group">
                   <label for="endereco">Endereço:</label>
                   <input type="text" name="endereco" id="endereco" placeholder class="form-control"
                     v-model="pessoa.endereco" />
@@ -171,22 +187,32 @@
                   <label for="email">Email:</label>
                   <input type="text" name="email" id="email" placeholder="email@domínio" class="form-control"
                     v-model="pessoa.email" v-validate="'email'" />
+                  <span>{{ errors.first('email') }}</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div v-if="tipopessoa.id_tipo_pessoa >= 2" class="form-group">
+                  <label for="rg">Identidade:</label>
+                  <input type="text" name="rg" id="rg" class="form-control" v-model="pessoa.rg" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div v-if="tipopessoa.id_tipo_pessoa >= 2" class="form-group">
+                  <label for="o_emissor">Orgão emissor:</label>
+                  <input type="text" name="o_emissor" id="o_emissor" class="form-control" v-model="pessoa.o_emissor" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div v-if="tipopessoa.id_tipo_pessoa >= 2" class="form-group">
+                  <label for="data_emissao">Data da emissão:</label>
+                  <input type="text" name="data_emissao" id="data_emissao" placeholder="__/__/____" class="form-control"
+                    v-model="pessoa.data_emissao" v-mask="'##/##/####'" />
                 </div>
               </div>
               <!--div>
-                <span>{{ errors.first('email') }}</span>
-                <div v-if="tipopessoa.id_tipo_pessoa === 1" class="form-group">
-                  <label for="cnpj">CNPJ:</label>
-                  <input type="text" name="cnpj" id="cnpj" placeholder="__.___.___-_____/__" class="form-control"
-                    v-model="pessoa.cnpj" v-mask="'##.###.###/####-##'" />
-                  <span>{{ errors.field }}</span>
-                </div>
-                <div v-if="tipopessoa.id_tipo_pessoa >= 2" class="form-group">
-                  <label for="cpf">CPF:</label>
-                  <input type="text" name="cpf" id="cpf" placeholder="___.___.___-__" class="form-control"
-                    v-model="pessoa.cpf" v-mask="'###.###.###-##'" />
-                  <span>{{ errors.field }}</span>
-                </div>
+                
+                
+                
               </div>
               <div class="col-md-6">
                 <div v-if="tipopessoa.id_tipo_pessoa >= 2" class="form-group">
