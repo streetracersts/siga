@@ -1,0 +1,9 @@
+.btn-primary {
+    float: right;
+  }
+.form-control.invalido{
+    border-color: red !important;
+}
+.form-group span{
+    color: red !important;
+}
