@@ -100,7 +100,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <select
+                  <select class="form-select" aria-label = "Selecionar tipo de cliente"
                     name="tipopessoa"
                     id="tipopessoa"
                     v-model="tipopessoa.id_tipo_pessoa"

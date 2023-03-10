@@ -145,14 +145,19 @@
                 </div>
                 <div class="form-group col-md-6">
                   <label for="tipo_servico">Serviço:</label>
-                  <input
-                    type="text"
-                    name="tipo_servico"
-                    id="tipo_servico"
-                    placeholder="Tipo de serviço"
-                    class="form-control"
-                    v-model="os.tipo_servico"
-                  />
+                  <select
+                    name="navio"
+                    id="navio"
+                    v-model="tiposervico.id_tiposervico"
+                  >
+                    <option disabled value>Selecione uma opção</option>
+                    <option
+                      v-for="item in tiposervico"
+                      :key="item.id"
+                      :value="item.id"
+                      >{{ item.tipo }}</option
+                    >
+                  </select>
                 </div>
                 <div class="form-group col-md-12">
                   <label for="descricao_servico">Descrição:</label>
@@ -312,6 +317,7 @@ export default {
       },
       pessoa:{},
       navio:{},
+      tiposervico:{},
       editar: {},
       msgs: [],
       lista: []
@@ -328,6 +334,7 @@ export default {
     this.exibeOss();
     this.exibePessoas();
     this.exibeNavios();
+    this.exibeServicos();
   },
   methods: {
     abreFormAdicionar() {
@@ -395,6 +402,11 @@ export default {
     exibeNavios(){
       axios.get("http://localhost:8000/api/navios").then(response => {
         this.navio = response.data;
+      });
+    },
+    exibeServicos(){
+      axios.get("http://localhost:8000/api/tiposervico").then(response => {
+        this.tiposervico = response.data;
       });
     },
     excluiPessoa(index) {
