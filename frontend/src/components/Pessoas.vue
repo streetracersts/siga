@@ -107,10 +107,10 @@
                   >
                     <option disabled value>Selecione uma opção</option>
                     <option
-                      v-for="tipo in tipopessoa"
-                      :key="tipo.id"
-                      :value="tipo.id"
-                      >{{ tipo.tipo }}</option
+                      v-for="item in tipopessoa"
+                      :key="item.id"
+                      :value="item.id"
+                      >{{ item.tipo }}</option
                     >
                   </select>
                 </div>
@@ -670,10 +670,7 @@ export default {
         status: "",
         observacoes: ""
       },
-      tipopessoa: {
-        id: "",
-        nome: ""
-      },
+      tipopessoa: {},
       editar: {},
       msgs: [],
       lista: []

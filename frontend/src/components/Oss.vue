@@ -27,10 +27,10 @@
                   <th>Motorista</th>
                   <th>Status</th>
                 </tr>
-                <tr v-for="(os, index) in oss" :key="os.id">
+                <tr v-for="(os, index) in lista" :key="os.id">
                   <td>{{ index + 1 }}</td>
                   <td>
-                    {{ oss.cliente }}
+                    {{ os.cliente }}
                   </td>
                   <td>
                     {{ os.navio }}
@@ -109,154 +109,168 @@
                 <li v-for="error in errors">{{ error }}</li>
               </ul>
             </div>
-            <div class="form-group col-md-6">
-              <label for="cliente">Cliente:</label>
-              <input
-                type="text"
-                name="cliente"
-                id="cliente"
-                placeholder="Nome fantasia"
-                class="form-control"
-                v-model="os.cliente"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="navio">Navio:</label>
-              <input
-                type="text"
-                name="navio"
-                id="navio"
-                placeholder="Nome do navio"
-                class="form-control"
-                v-model="os.navio"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="tipo_servico">Serviço:</label>
-              <input
-                type="text"
-                name="tipo_servico"
-                id="tipo_servico"
-                placeholder="Tipo de serviço"
-                class="form-control"
-                v-model="os.tipo_servico"
-              />
-            </div>
-            <div class="form-group col-md-12">
-              <label for="descricao_servico">Descrição:</label>
-              <textarea
-                name="descricao_servico"
-                id="descricao_servico"
-                cols="30"
-                rows="5"
-                class="form-control"
-                placeholder="Descrição do serviço"
-                v-model="os.descricao_servico"
-              ></textarea>
-            </div>
-            <div class="form-group">
-              <label for="Locais">Locais:</label>
-              <textarea
-                name="locais"
-                id="locais"
-                cols="30"
-                rows="5"
-                class="form-control"
-                placeholder="Adicione os locais de saída, destino e as paradas"
-                v-model="os.locais"
-              ></textarea>
-            </div>
-            <div class="form-group">
-              <label for="data_saida">Data de Saída:</label>
-              <input
-                type="text"
-                name="data_saida"
-                id="data_saida"
-                placeholder="Data de início do serviço"
-                class="form-control"
-                v-model="os.data_inicio"
-                v-mask="'##/##/####'"
-              />
-            </div>
-            <div class="form-group">
-              <label for="hora_saida">Hora de saída:</label>
-              <input
-                type="text"
-                name="hora_saida"
-                id="hora_saida"
-                placeholder="Horario de saída do carro"
-                class="form-control"
-                v-model="os.hora_inicio"
-                v-mask="'##:##'"
-              />
-            </div>
-            <div class="form-group">
-              <label for="data_termino">Data de Término:</label>
-              <input
-                type="text"
-                name="data_termino"
-                id="data_termino"
-                placeholder="Data de término do serviço"
-                class="form-control"
-                v-model="os.data_termino"
-                v-mask="'##/##/####'"
-              />
-            </div>
-            <div class="form-group">
-              <label for="hora_termino">Hora de Término:</label>
-              <input
-                type="text"
-                name="hora_termino"
-                id="hora_termino"
-                placeholder="Horario de termino do serviçoo"
-                class="form-control"
-                v-model="os.hora_termino"
-                v-mask="'##:##'"
-              />
-            </div>
-            <div class="form-group">
-              <label for="km_inicial">KM inicial:</label>
-              <input
-                type="text"
-                name="km_inicial"
-                id="km_inicial"
-                placeholder="KM do veículo ao início da viagem"
-                class="form-control"
-                v-model="os.km_inicial"
-              />
-            </div>
-            <div class="form-group">
-              <label for="km_final">KM final:</label>
-              <input
-                type="text"
-                name="km_final"
-                id="km_final"
-                placeholder="KM final do veículo ao término da viagem"
-                class="form-control"
-                v-model="os.km_final"
-              />
-            </div>
-            <div class="form-group">
-              <label for="motorista">Motorista:</label>
-              <input
-                type="text"
-                name="motorista"
-                id="motorista"
-                placeholder=""
-                class="form-control"
-                v-model="os.motorista"
-              />
-            </div>
-            <div class="form-group">
-              <label for="ststus">Status do Trabalho:</label>
-              <input
-                type="text"
-                name="status"
-                id="status"
-                placeholder=""
-                class="form-control"
-                v-model="os.status"
-              />
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label for="cliente">Cliente:</label>
+                  <select
+                    name="cliente"
+                    id="cliente"
+                    v-model="pessoa.id_pessoa"
+                  >
+                    <option disabled value>Selecione uma opção</option>
+                    <option
+                      v-for="item in pessoa"
+                      :key="item.id"
+                      :value="item.id"
+                      >{{ item.apelido }}</option
+                    >
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="navio">Navio:</label>
+                  <select
+                    name="navio"
+                    id="navio"
+                    v-model="navio.id_navio"
+                  >
+                    <option disabled value>Selecione uma opção</option>
+                    <option
+                      v-for="item in navio"
+                      :key="item.id"
+                      :value="item.id"
+                      >{{ item.nome }}</option
+                    >
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="tipo_servico">Serviço:</label>
+                  <input
+                    type="text"
+                    name="tipo_servico"
+                    id="tipo_servico"
+                    placeholder="Tipo de serviço"
+                    class="form-control"
+                    v-model="os.tipo_servico"
+                  />
+                </div>
+                <div class="form-group col-md-12">
+                  <label for="descricao_servico">Descrição:</label>
+                  <textarea
+                    name="descricao_servico"
+                    id="descricao_servico"
+                    cols="30"
+                    rows="5"
+                    class="form-control"
+                    placeholder="Descrição do serviço"
+                    v-model="os.descricao_servico"
+                  ></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="Locais">Locais:</label>
+                  <textarea
+                    name="locais"
+                    id="locais"
+                    cols="30"
+                    rows="5"
+                    class="form-control"
+                    placeholder="Adicione os locais de saída, destino e as paradas"
+                    v-model="os.locais"
+                  ></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="data_saida">Data de Saída:</label>
+                  <input
+                    type="text"
+                    name="data_saida"
+                    id="data_saida"
+                    placeholder="Data de início do serviço"
+                    class="form-control"
+                    v-model="os.data_inicio"
+                    v-mask="'##/##/####'"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="hora_saida">Hora de saída:</label>
+                  <input
+                    type="text"
+                    name="hora_saida"
+                    id="hora_saida"
+                    placeholder="Horario de saída do carro"
+                    class="form-control"
+                    v-model="os.hora_inicio"
+                    v-mask="'##:##'"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="data_termino">Data de Término:</label>
+                  <input
+                    type="text"
+                    name="data_termino"
+                    id="data_termino"
+                    placeholder="Data de término do serviço"
+                    class="form-control"
+                    v-model="os.data_termino"
+                    v-mask="'##/##/####'"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="hora_termino">Hora de Término:</label>
+                  <input
+                    type="text"
+                    name="hora_termino"
+                    id="hora_termino"
+                    placeholder="Horario de termino do serviçoo"
+                    class="form-control"
+                    v-model="os.hora_termino"
+                    v-mask="'##:##'"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="km_inicial">KM inicial:</label>
+                  <input
+                    type="text"
+                    name="km_inicial"
+                    id="km_inicial"
+                    placeholder="KM do veículo ao início da viagem"
+                    class="form-control"
+                    v-model="os.km_inicial"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="km_final">KM final:</label>
+                  <input
+                    type="text"
+                    name="km_final"
+                    id="km_final"
+                    placeholder="KM final do veículo ao término da viagem"
+                    class="form-control"
+                    v-model="os.km_final"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="motorista">Motorista:</label>
+                  <input
+                    type="text"
+                    name="motorista"
+                    id="motorista"
+                    placeholder=""
+                    class="form-control"
+                    v-model="os.motorista"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="ststus">Status do Trabalho:</label>
+                  <input
+                    type="text"
+                    name="status"
+                    id="status"
+                    placeholder=""
+                    class="form-control"
+                    v-model="os.status"
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -284,7 +298,7 @@ export default {
   data() {
     return {
       os: {
-        clente: "",
+        cliente: "",
         navio: "",
         tipo_servico: "",
         descricao_servico: "",
@@ -296,20 +310,35 @@ export default {
         motorista: "",
         status_os: "",
       },
-      emsgs: [],
+      pessoa:{},
+      navio:{},
       editar: {},
+      msgs: [],
+      lista: []
     };
+  },
+  mounted() {
+    this.$nextTick(function() {
+      window.addEventListener("keyup", event => {
+        if (event.keyCode === 187) {
+          this.abreFormAdicionar();
+        }
+      });
+    });
+    this.exibeOss();
+    this.exibePessoas();
+    this.exibeNavios();
   },
   methods: {
     abreFormAdicionar() {
-      //this.errors = [];
+      this.errors = [];
       $("#nova_os_modal").modal("show");
     },
     criaOS() {
       axios
-        .post("/os", {
-          cliente: this.os.cliente,
-          navio: this.os.navio,
+        .post("/oss", {
+          id_pessoa: this.pessoa.id_pessoa,
+          id_navio: this.navio.id_navio,
           tipo_servico: this.os.tipo_servico,
           descricao_servico: this.os.descricao_servico,
           locais: this.os.lcoais,
@@ -354,8 +383,18 @@ export default {
       (this.os.status = "");
     },
     exibeOss() {
-      axios.get("/os").then((response) => {
-        this.oss = JSON.parse(this.oss);
+      axios.get("http://localhost:8000/api/oss").then((response) => {
+        this.lista = response.data;
+      });
+    },
+    exibePessoas() {
+      axios.get("http://localhost:8000/api/pessoa").then(response => {
+        this.pessoa = response.data;
+      });
+    },
+    exibeNavios(){
+      axios.get("http://localhost:8000/api/navios").then(response => {
+        this.navio = response.data;
       });
     },
     excluiPessoa(index) {
