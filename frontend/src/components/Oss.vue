@@ -1,55 +1,31 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <div class="panel panel-default">
-          <div class="panel-heading">
+        <div class="card">
+          <div class="card-header">
+            <h1 class="titulo-secao">Ordens de Serviço</h1>
             <button
-              @click="abreNovaOS()"
+              @click="abreFormAdicionar()"
               class="btn btn-primary btn-xs pull-right"
             >
-              + Nova
+              (+)Adicionar
             </button>
-            Ordem de Serviço
           </div>
-
-          <div class="panel-body">
-            <table
-              class="table table-bordered table-striped table-responsive"
-              v-if="oss.length > 0"
-            >
+          <div class="card-body">
+            <table class="table table-bordered table-striped table-responsive">
               <tbody>
                 <tr>
-                  <th>
-                    No.
-                  </th>
-                  <th>
-                    Cliente
-                  </th>
-                  <th>
-                    Navio
-                  </th>
-                  <th>
-                    Tipo de Serviço
-                  </th>
-                  <td>
-                    Descrição
-                  </td>
-                  <th>
-                    Locais
-                  </th>
-                  <th>
-                    Horário de Saída
-                  </th>
-                  <th>
-                    Horário de término
-                  </th>
-                  <th>
-                    Motorista
-                  </th>
-                  <th>
-                    Status
-                  </th>
+                  <th>No.</th>
+                  <th>Cliente</th>
+                  <th>Navio</th>
+                  <th>Tipo de Serviço</th>
+                  <th>Descrição</th>
+                  <th>Locais</th>
+                  <th>Horário de Saída</th>
+                  <th>Horário de término</th>
+                  <th>Motorista</th>
+                  <th>Status</th>
                 </tr>
                 <tr v-for="(os, index) in oss" :key="os.id">
                   <td>{{ index + 1 }}</td>
@@ -92,18 +68,6 @@
                   <td>
                     {{ os.status }}
                   </td>
-                  <!-- <td>
-                                    {{ funcionario.cidade }}
-                                </td>
-								<td>
-                                    {{ funcionario.uf }}
-                                </td>
-                                <td>
-                                    {{ funcionario.nome_pai }}
-                                </td>
-								<td>
-                                    {{ funcionario.nome_mae }}
-                                </td> -->
                   <td>
                     <button
                       @click="initUpdate(index)"
@@ -112,7 +76,7 @@
                       Editar
                     </button>
                     <button
-                      @click="deleteFuncionario(index)"
+                      @click="excluiOs(index)"
                       class="btn btn-danger btn-xs"
                     >
                       Excluir
@@ -126,7 +90,7 @@
       </div>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="nova_os_modal">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button
@@ -313,8 +277,10 @@
 </template>
 
 <script>
+import axios from "axios";
+import $ from "jquery";
 export default {
-  props: ["oss"],
+  //props: ["oss"],
   data() {
     return {
       os: {
@@ -328,15 +294,15 @@ export default {
         km_inicial: "",
         km_final: "",
         motorista: "",
-        status_os: ""
+        status_os: "",
       },
-      errors: [],
-      editar: {}
+      emsgs: [],
+      editar: {},
     };
   },
   methods: {
-    abreNovaOS() {
-      this.errors = [];
+    abreFormAdicionar() {
+      //this.errors = [];
       $("#nova_os_modal").modal("show");
     },
     criaOS() {
@@ -352,16 +318,16 @@ export default {
           km_inicial: this.os.km_inicial,
           km_final: this.os.km_final,
           motorista: this.os.motorista,
-          status_os: this.os.status
+          status_os: this.os.status,
         })
-        .then(response => {
+        .then((response) => {
           this.reset();
 
           //this.oss.push(response.data.os);
 
           $("#nova_os_modal").modal("hide");
         })
-        .catch(error => {
+        .catch((error) => {
           this.errors = [];
           if (error.response.data.errors.name) {
             this.errors.push(error.response.data.errors.name[0]);
@@ -374,24 +340,35 @@ export default {
     },
     reset() {
       (this.os.cliente = ""),
-        (this.os.navio = ""),
-        (this.os.tipo_servico = ""),
-        (this.os.descricao_servico = ""),
-        (this.os.locais = ""),
-        (this.os.data_inicio = ""),
-        (this.os.hora_inicio = ""),
-        (this.os.data_termino = ""),
-        (this.os.hora_termino = ""),
-        (this.os.km_inicial = ""),
-        (this.os.km_final = ""),
-        (this.os.motorista = ""),
-        (this.os.status = "");
+      (this.os.navio = ""),
+      (this.os.tipo_servico = ""),
+      (this.os.descricao_servico = ""),
+      (this.os.locais = ""),
+      (this.os.data_inicio = ""),
+      (this.os.hora_inicio = ""),
+      (this.os.data_termino = ""),
+      (this.os.hora_termino = ""),
+      (this.os.km_inicial = ""),
+      (this.os.km_final = ""),
+      (this.os.motorista = ""),
+      (this.os.status = "");
     },
     exibeOss() {
-      axios.get("/os").then(response => {
+      axios.get("/os").then((response) => {
         this.oss = JSON.parse(this.oss);
       });
+    },
+    excluiPessoa(index) {
+      let conf = confirm("Deseja mesmo remover esta os?" );
+      if (conf === true) {
+        axios
+          .delete("http://localhost:8000/api/oss/" + this .lista[index].id)
+          .then(response => {
+            this.lista.splice(index, 1);
+          })
+          .catch(error => {});
+      }
     }
-  }
+  },
 };
 </script>

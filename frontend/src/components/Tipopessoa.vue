@@ -9,7 +9,7 @@
               @click="abreFormAdicionar()"
               class="btn btn-primary btn-xs pull-right"
             >
-              (+)Novo
+              (+)Adicionar
             </button>
           </div>
           <div class="card-body">
@@ -60,7 +60,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="tipo">Tipo de pessoa: *</label>
-                   <input
+                  <input
                     type="text"
                     name="tipo"
                     id="tipo"
@@ -70,14 +70,28 @@
                     @keyup.13="adicionaTipoPessoa"
                     v-validate="'required'"
                   />
-                  <span>{{ errors.first('tipo') }}</span>
+                  <span>{{ errors.first("tipo") }}</span>
                 </div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" @click="fecharModal" @keyup.27="fecharModal" class="btn btn-default">Cancelar</button>
-            <button type="button" @click="adicionaTipoPessoa" class="btn btn-primary" :disabled="ativarBotao">Salvar</button>
+            <button
+              type="button"
+              @click="fecharModal"
+              @keyup.27="fecharModal"
+              class="btn btn-default"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              @click="adicionaTipoPessoa"
+              class="btn btn-primary"
+              :disabled="ativarBotao"
+            >
+              Salvar
+            </button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -112,12 +126,12 @@ export default {
       });
     });
   },
-  computed:{
-     ativarBotao() {
-      if (this.tipopessoa.tipo.length > 3){
-        return (this.inativo <= false)
+  computed: {
+    ativarBotao() {
+      if (this.tipopessoa.tipo.length > 3) {
+        return this.inativo <= false;
       }
-      return (this.inativo <= true)
+      return this.inativo <= true;
     }
   },
   methods: {
@@ -139,7 +153,7 @@ export default {
         })
         .then(response => {
           this.lista.push(response.data);
-          this.msgs.push(response.data.tipo +' cadastrado com sucesso!')
+          this.msgs.push(response.data.tipo + " cadastrado com sucesso!");
           this.limpaCampos();
           $("#tipo").trigger("focus");
         })
@@ -165,15 +179,15 @@ export default {
     limpaCampos() {
       this.esconde_alerta();
       this.errors.clear();
-      this.tipopessoa.tipo = '';
-      $('.form-control.invalido').removeClass('invalido');
+      this.tipopessoa.tipo = "";
+      $(".form-control.invalido").removeClass("invalido");
     },
-    esconde_alerta(){
+    esconde_alerta() {
       setTimeout(() => {
-          $(".alert").alert('close')
+        $(".alert").alert("close");
       }, 7000);
     },
-    fecharModal(){
+    fecharModal() {
       this.limpaCampos();
       $("#modal_novo").modal("hide");
     }

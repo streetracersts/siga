@@ -5,8 +5,11 @@
         <div class="card">
           <div class="card-header">
             <h1 class="titulo-secao">Tipos de Serviço</h1>
-            <button @click="abreFormAdicionar()" class="btn btn-primary btn-xs pull-right">
-              (+)Novo
+            <button
+              @click="abreFormAdicionar()"
+              class="btn btn-primary btn-xs pull-right"
+            >
+              (+)Adicionar
             </button>
           </div>
           <div class="card-body">
@@ -23,7 +26,10 @@
                   <td>{{ item.tipo }}</td>
                   <td>{{ item.descricao }}</td>
                   <td>
-                    <button v-on:click="excluiTiposervico(index)" class="btn btn-danger btn-xs">
+                    <button
+                      v-on:click="excluiTiposervico(index)"
+                      class="btn btn-danger btn-xs"
+                    >
                       Excluir
                     </button>
                   </td>
@@ -38,7 +44,12 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
             <h4 class="modal-title">ADICIONAR TIPO DE SERVIÇO</h4>
@@ -51,21 +62,52 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="tipo">Tipo:</label>
-                  <input type="text" name="tipo" id="tipo" class="form-control" v-model="tiposervico.tipo"
-                    @keyup.13="adicionaTiposervico" v-validate="'required'" />
-                  <span>{{ errors.first('tipo') }}</span>
+                  <input
+                    type="text"
+                    name="tipo"
+                    id="tipo"
+                    class="form-control"
+                    v-model="tiposervico.tipo"
+                    @keyup.13="adicionaTiposervico"
+                    v-validate="'required'"
+                  />
+                  <span>{{ errors.first("tipo") }}</span>
                 </div>
                 <div class="form-group">
                   <label for="descricao">Descrição:</label>
-                  <textarea type="text" name="descricao" id="descricao" placeholder="Descriçao do serviço" class="form-control" col="30" rows="5"
-                    v-model="tiposervico.descricao" @keyup.13="adicionaTiposervico"></textarea>
+                  <textarea
+                    type="text"
+                    name="descricao"
+                    id="descricao"
+                    placeholder="Descriçao do serviço"
+                    class="form-control"
+                    col="30"
+                    rows="5"
+                    v-model="tiposervico.descricao"
+                    @keyup.13="adicionaTiposervico"
+                  ></textarea>
                 </div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" @click="fecharModal" @keyup.27="fecharModal" class="btn btn-default">Fechar</button>
-            <button type="button" @click="adicionaTiposervico" @keyup.13="adicionaTiposervico" class="btn btn-primary" :disabled="ativarBotao">Salvar</button>
+            <button
+              type="button"
+              @click="fecharModal"
+              @keyup.27="fecharModal"
+              class="btn btn-default"
+            >
+              Fechar
+            </button>
+            <button
+              type="button"
+              @click="adicionaTiposervico"
+              @keyup.13="adicionaTiposervico"
+              class="btn btn-primary"
+              :disabled="ativarBotao"
+            >
+              Salvar
+            </button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -92,7 +134,7 @@ export default {
   },
   mounted() {
     this.exibeTipo_servico();
-    this.$nextTick(function () {
+    this.$nextTick(function() {
       window.addEventListener("keyup", event => {
         if (event.keyCode === 187) {
           this.abreFormAdicionar();
@@ -100,12 +142,12 @@ export default {
       });
     });
   },
-  computed:{
+  computed: {
     ativarBotao() {
-      if (this.tiposervico.tipo.length > 3){
-        return (this.inativo <= false)
+      if (this.tiposervico.tipo.length > 3) {
+        return this.inativo <= false;
       }
-      return (this.inativo <= true)
+      return this.inativo <= true;
     }
   },
   methods: {
@@ -116,7 +158,7 @@ export default {
     },
     abreFormAdicionar() {
       $("#modal_novo").modal("show");
-      $("#modal_novo").on("shown.bs.modal", function () {
+      $("#modal_novo").on("shown.bs.modal", function() {
         $("#tipo").trigger("focus");
       });
     },
@@ -128,7 +170,7 @@ export default {
         })
         .then(response => {
           this.lista.push(response.data);
-          this.msgs.push(response.data.tipo +' cadastrado com sucesso!');
+          this.msgs.push(response.data.tipo + " cadastrado com sucesso!");
           this.limpaCampos();
         })
         .catch(error => {
@@ -140,18 +182,19 @@ export default {
         "Deseja realmente excluir " + this.lista[index].tipo + "?"
       );
       if (conf === true) {
-        axios.delete(
-          "http://localhost:8000/api/tiposervico/" + this.lista[index].id
-        )
-        .then(this.lista.splice(index, 1))
-        .catch(error => {
-          this.msgs.push(error.response.data.errors);
-        });
+        axios
+          .delete(
+            "http://localhost:8000/api/tiposervico/" + this.lista[index].id
+          )
+          .then(this.lista.splice(index, 1))
+          .catch(error => {
+            this.msgs.push(error.response.data.errors);
+          });
       }
     },
     limpaCampos() {
       this.errors.clear();
-      this.tiposervico.tipo = '';
+      this.tiposervico.tipo = "";
       $("#tipo").trigger("focus");
     },
     fecharModal() {
