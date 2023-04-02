@@ -17,9 +17,9 @@ class OsController extends Controller
 
     public function index()
     {
-        $oss = Os::all();
-
-        return view('oss')->with(compact('oss'));
+        {return response()->json(
+            Os::all());
+        }
     }
 
     /**

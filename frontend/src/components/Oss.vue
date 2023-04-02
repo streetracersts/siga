@@ -144,10 +144,10 @@
                   </select>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="tipo_servico">Serviço:</label>
+                  <label for="tiposervico">Serviço:</label>
                   <select
-                    name="navio"
-                    id="navio"
+                    name="tiposervico"
+                    id="tiposervico"
                     v-model="tiposervico.id_tiposervico"
                   >
                     <option disabled value>Selecione uma opção</option>
@@ -343,10 +343,10 @@ export default {
     },
     criaOS() {
       axios
-        .post("/oss", {
+        .post("http://localhost:8000/api/oss", {
           id_pessoa: this.pessoa.id_pessoa,
           id_navio: this.navio.id_navio,
-          tipo_servico: this.os.tipo_servico,
+          id_tipo_servico: this.tiposervico.id_tiposervico,
           descricao_servico: this.os.descricao_servico,
           locais: this.os.lcoais,
           data_hora_inicio: "2019-05-02 15:00:00",
@@ -354,7 +354,7 @@ export default {
           km_inicial: this.os.km_inicial,
           km_final: this.os.km_final,
           motorista: this.os.motorista,
-          status_os: this.os.status,
+          status_os: 1,
         })
         .then((response) => {
           this.reset();
@@ -364,14 +364,14 @@ export default {
           $("#nova_os_modal").modal("hide");
         })
         .catch((error) => {
-          this.errors = [];
-          if (error.response.data.errors.name) {
-            this.errors.push(error.response.data.errors.name[0]);
-          }
+          // this.errors = [];
+          // if (error.response.data.errors.name) {
+          //   this.errors.push(error.response.data.errors.name[0]);
+          // }
 
-          if (error.response.data.errors.description) {
-            this.errors.push(error.response.data.errors.description[0]);
-          }
+          // if (error.response.data.errors.description) {
+          //   this.errors.push(error.response.data.errors.description[0]);
+          // }
         });
     },
     reset() {
