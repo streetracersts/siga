@@ -25,6 +25,7 @@ class CreateOssTable extends Migration
             $table->unsignedInteger('km_inicial')->nullable();
             $table->unsignedInteger('km_final')->nullable();
             $table->text('obs')->nullable();
+            $table->unsignedInteger('id_motorista');
             $table->timestamps();
         });                                                     
         Schema::table('oss', function (Blueprint $table) {
