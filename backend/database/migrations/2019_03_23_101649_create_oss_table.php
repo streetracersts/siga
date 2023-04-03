@@ -22,6 +22,8 @@ class CreateOssTable extends Migration
             $table->integer('status_os');
             $table->dateTime('data_hora_inicio')->nullable();
             $table->dateTime('data_hora_termino')->nullable();
+            $table->unsignedInteger('km_inicial')->nullable();
+            $table->unsignedInteger('km_final')->nullable();
             $table->text('obs')->nullable();
             $table->timestamps();
         });                                                     
