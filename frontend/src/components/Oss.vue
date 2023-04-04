@@ -116,7 +116,7 @@
                   <select
                     name="cliente"
                     id="cliente"
-                    v-model="pessoa.id_pessoa"
+                    v-model="os.id_pessoa"
                   >
                     <option disabled value>Selecione uma opção</option>
                     <option
@@ -132,7 +132,7 @@
                   <select
                     name="navio"
                     id="navio"
-                    v-model="navio.id_navio"
+                    v-model="os.id_navio"
                   >
                     <option disabled value>Selecione uma opção</option>
                     <option
@@ -148,7 +148,7 @@
                   <select
                     name="tiposervico"
                     id="tiposervico"
-                    v-model="tiposervico.id_tiposervico"
+                    v-model="os.id_tiposervico"
                   >
                     <option disabled value>Selecione uma opção</option>
                     <option
