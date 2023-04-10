@@ -803,8 +803,8 @@ export default {
     atualizaPessoa() {
       axios
         .patch("/pessoas/" + this.editar.id, {
-          name: this.editar.name,
-          description: this.editar.description
+          apelido: this.atualizaPessoa.apelido,
+          nome_razao: this.atualizaPessoa.nome_razao
         })
         .then(response => {
           $("#update_task_model").modal("hide");
