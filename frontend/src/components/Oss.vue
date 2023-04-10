@@ -28,7 +28,9 @@
                   <th>Status</th>
                 </tr>
                 <tr v-for="(os, index) in lista" :key="os.id">
-                  <td>{{ index + 1 }}</td>
+                  <td>
+                    {{ os.id }}
+                  </td>
                   <td>
                     {{ os.cliente }}
                   </td>
@@ -409,7 +411,7 @@ export default {
         this.tiposervico = response.data;
       });
     },
-    excluiPessoa(index) {
+    excluiOss(index) {
       let conf = confirm("Deseja mesmo remover esta os?" );
       if (conf === true) {
         axios
