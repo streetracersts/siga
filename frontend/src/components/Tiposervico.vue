@@ -68,7 +68,6 @@
                     id="tipo"
                     class="form-control"
                     v-model="tiposervico.tipo"
-                    @keyup.13="adicionaTiposervico"
                     v-validate="'required'"
                   />
                   <span>{{ errors.first("tipo") }}</span>
@@ -84,7 +83,6 @@
                     col="30"
                     rows="5"
                     v-model="tiposervico.descricao"
-                    @keyup.13="adicionaTiposervico"
                   ></textarea>
                 </div>
               </div>
@@ -103,6 +101,80 @@
               type="button"
               @click="adicionaTiposervico"
               @keyup.13="adicionaTiposervico"
+              class="btn btn-primary"
+              :disabled="ativarBotao"
+            >
+              Salvar
+            </button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal_editar">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">EDITAR TIPO DE SERVIÇO</h4>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-danger" v-if="msgs.length > 0">
+              <p v-for="msg in msgs" v-bind:key="msgs">{{ msg }}</p>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="tipo">Tipo:</label>
+                  <input
+                    type="text"
+                    name="tipo"
+                    id="tipo"
+                    class="form-control"
+                    v-model="atualizartiposervico.tipo"
+                    v-validate="'required'"
+                  />
+                  <span>{{ errors.first("tipo") }}</span>
+                </div>
+                <div class="form-group">
+                  <label for="descricao">Descrição:</label>
+                  <textarea
+                    type="text"
+                    name="descricao"
+                    id="descricao"
+                    placeholder="Descriçao do serviço"
+                    class="form-control"
+                    col="30"
+                    rows="5"
+                    v-model="atualizartiposervico.descricao"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              @click="fecharModal"
+              @keyup.27="fecharModal"
+              class="btn btn-default"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              @click="atualizarTipoPessoa"
+              @keyup.13="atualizarTipoServco"
               class="btn btn-primary"
               :disabled="ativarBotao"
             >
@@ -175,6 +247,25 @@ export default {
         })
         .catch(error => {
           this.msgs.push(error.response.data.errors);
+        });
+    },
+    atualizaTipoServco() {
+      axios
+        .patch("/tiposervico/" + this.editar.id, {
+          name: this.atualizartiposervico.tipo,
+          description: this.atualizattiposervico.descricao
+        })
+        .then(response => {
+          $("#update_task_model").modal("hide");
+        })
+        .catch(error => {
+          this.errors = [];
+          if (error.response.data.errors.name) {
+            this.errors.push(error.response.data.errors.name[0]);
+          }
+          if (error.response.data.errors.description) {
+            this.errors.push(error.response.data.errors.description[0]);
+          }
         });
     },
     excluiTiposervico(index) {
