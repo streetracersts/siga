@@ -32,7 +32,7 @@ Route::middleware(['auth:api'])->group(function () {
     
 });
 header('Access-Control-Allow-Origin:  *');
-header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, PATCH, DELETE');
 header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
 Route::resource('/tipopessoa', 'TipoPessoaController');
 Route::resource('/tiposervico', 'TipoServicoController');

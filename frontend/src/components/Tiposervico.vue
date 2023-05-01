@@ -27,6 +27,12 @@
                   <td>{{ item.descricao }}</td>
                   <td>
                     <button
+                      @click="abreEditarModal(index)"
+                      class="btn btn-success btn-xs"
+                    >
+                      Editar
+                    </button>
+                    <button
                       v-on:click="excluiTiposervico(index)"
                       class="btn btn-danger btn-xs"
                     >
@@ -102,7 +108,7 @@
               @click="adicionaTiposervico"
               @keyup.13="adicionaTiposervico"
               class="btn btn-primary"
-              :disabled="ativarBotao"
+              :disabled="ativaBotao"
             >
               Salvar
             </button>
@@ -113,81 +119,80 @@
       <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-  </div>
-  <div class="modal fade" tabindex="-1" role="dialog" id="modal_editar">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <h4 class="modal-title">EDITAR TIPO DE SERVIÇO</h4>
-          </div>
-          <div class="modal-body">
-            <div class="alert alert-danger" v-if="msgs.length > 0">
-              <p v-for="msg in msgs" v-bind:key="msgs">{{ msg }}</p>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_editar">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">EDITAR TIPO DE SERVIÇO</h4>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="tipo">Tipo:</label>
-                  <input
-                    type="text"
-                    name="tipo"
-                    id="tipo"
-                    class="form-control"
-                    v-model="atualizartiposervico.tipo"
-                    v-validate="'required'"
-                  />
-                  <span>{{ errors.first("tipo") }}</span>
-                </div>
-                <div class="form-group">
-                  <label for="descricao">Descrição:</label>
-                  <textarea
-                    type="text"
-                    name="descricao"
-                    id="descricao"
-                    placeholder="Descriçao do serviço"
-                    class="form-control"
-                    col="30"
-                    rows="5"
-                    v-model="atualizartiposervico.descricao"
-                  ></textarea>
+            <div class="modal-body">
+              <div class="alert alert-danger" v-if="msgs.length > 0">
+                <p v-for="msg in msgs" v-bind:key="msgs">{{ msg }}</p>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="tipo">Tipo:</label>
+                    <input                      
+                      type="text"
+                      name="tipo"
+                      id="tipo"
+                      class="form-control"
+                      v-model="editartiposervico.tipo"
+                      v-validate="'required'"
+                    />
+                    <span>{{ errors.first("tipo") }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label for="descricao">Descrição:</label>
+                    <textarea
+                      type="text"
+                      name="descricao"
+                      id="descricao"
+                      placeholder="Descriçao do serviço"
+                      class="form-control"
+                      col="30"
+                      rows="5"
+                      v-model="editartiposervico.descricao"
+                    ></textarea>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                @click="fecharModal"
+                @keyup.27="fecharModal"
+                class="btn btn-default"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                @click="atualizaTiposervico"
+                @keyup.13="atualizaTiposervico"
+                class="btn btn-primary"
+                :disabled="ativaBotao"
+              >
+                Salvar
+              </button>
+            </div>
           </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              @click="fecharModal"
-              @keyup.27="fecharModal"
-              class="btn btn-default"
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              @click="atualizarTipoPessoa"
-              @keyup.13="atualizarTipoServco"
-              class="btn btn-primary"
-              :disabled="ativarBotao"
-            >
-              Salvar
-            </button>
-          </div>
+          <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
+        <!-- /.modal-dialog -->
       </div>
-      <!-- /.modal-dialog -->
+      <!-- /.modal -->
     </div>
-    <!-- /.modal -->
-  </div>
 </template>
 <script>
 import axios from "axios";
@@ -198,10 +203,16 @@ export default {
       inativo: true,
       tiposervico: {
         id: "",
-        tipo: ""
+        tipo: "",
+        descricao: ""
       },
+      editartiposervico:{
+        id: "",
+        tipo: "",
+        descricao: ""
+      },
+      msgs: [],
       lista: [],
-      msgs: []
     };
   },
   mounted() {
@@ -215,8 +226,11 @@ export default {
     });
   },
   computed: {
-    ativarBotao() {
+    ativaBotao() {
       if (this.tiposervico.tipo.length > 3) {
+        return this.inativo <= false;
+      }
+      if (this.editartiposervico.tipo.length > 3){
         return this.inativo <= false;
       }
       return this.inativo <= true;
@@ -234,6 +248,12 @@ export default {
         $("#tipo").trigger("focus");
       });
     },
+    abreEditarModal(index) {
+      //this.errors = [];
+      $("#modal_editar").modal("show");
+      console.log (this.lista[index])
+      this.editartiposervico = this.lista[index];
+    },
     adicionaTiposervico() {
       axios
         .post("http://localhost:8000/api/tiposervico", {
@@ -249,17 +269,18 @@ export default {
           this.msgs.push(error.response.data.errors);
         });
     },
-    atualizaTipoServco() {
+    atualizaTiposervico() {
       axios
-        .patch("/tiposervico/" + this.editar.id, {
-          name: this.atualizartiposervico.tipo,
-          description: this.atualizattiposervico.descricao
+        .patch("http://localhost:8000/api/tiposervico/" + this.editartiposervico.id, {
+          id: this.editartiposervico.id,
+          tipo: this.editartiposervico.tipo,
+          descricao: this.editartiposervico.descricao
         })
         .then(response => {
-          $("#update_task_model").modal("hide");
+          $("#editar_modal").modal("hide");
         })
         .catch(error => {
-          this.errors = [];
+          //this.errors = [];
           if (error.response.data.errors.name) {
             this.errors.push(error.response.data.errors.name[0]);
           }

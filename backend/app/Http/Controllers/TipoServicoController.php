@@ -74,9 +74,31 @@ class TipoServicoController extends Controller
      * @param  \App\TipoServico  $tipoServico
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TipoServico $tipoServico)
+    public function update(Request $request, $id)
     {
-        //
+
+
+        $tiposervico = TipoServico::findOrFail($id);
+        $tiposervico->update($request->all());
+        //return $company;
+        return response()->json([
+            'message' => 'Registro atualizado com sucesso!'
+        ], 200);
+
+        // $tipoServico=TipoServico::where('id',$id)->first();
+        // $tipoServico->tipo=$request->get('tipo');
+        // $tipoServico->descricao=$request->get('descricao');
+        // $todo->is_completed=$request->get('is_completed');
+        // $todo->save();
+        // return response()->json([
+        //     'message' => 'Registro atualizado com sucesso!'
+        // ], 200);
+
+        //return redirect()->route('tiposervico.index')->with('success', 'Updated Todo');
+        // $tipoServico->save();
+        // return response()->json([
+        //     'message' => 'Registro atualizado com sucesso!'
+        // ], 200);
     }
 
     /**

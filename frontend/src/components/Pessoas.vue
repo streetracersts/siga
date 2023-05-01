@@ -568,7 +568,7 @@
       <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="editar_modal">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_editar">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -612,7 +612,7 @@
             </button>
             <button
               type="button"
-              @keyup.13="adicionaPessoa"
+              @keyup.13="atualizaPessoa"
               @click="atualizaPessoa"
               class="btn btn-primary"
             >
@@ -797,7 +797,7 @@ export default {
     },
     abreEditarModal(index) {
       //this.errors = [];
-      $("#editar_modal").modal("show");
+      $("#modal_editar").modal("show");
       this.editar = this.lista[index];
     },
     atualizaPessoa() {
