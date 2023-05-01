@@ -42,6 +42,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
+            <h4 class="modal-title">ADICIONAR TIPO DE PESSOA</h4>
             <button
               type="button"
               class="close"
@@ -50,7 +51,6 @@
             >
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">ADICIONAR TIPO DE PESSOA</h4>
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" v-if="msgs.length > 0">

@@ -17,7 +17,7 @@
               <tbody>
                 <tr>
                   <th></th>
-                  <th>Tipo</th>
+                  <th>Serviço</th>
                   <th>Descrição Padrão</th>
                   <td></td>
                 </tr>
@@ -50,6 +50,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
+            <h4 class="modal-title">ADICIONAR TIPO DE SERVIÇO</h4>
             <button
               type="button"
               class="close"
@@ -58,7 +59,6 @@
             >
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">ADICIONAR TIPO DE SERVIÇO</h4>
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" v-if="msgs.length > 0">
@@ -73,6 +73,7 @@
                     name="tipo"
                     id="tipo"
                     class="form-control"
+                    @keyup.alt.s="adicionaTiposervico"
                     v-model="tiposervico.tipo"
                     v-validate="'required'"
                   />
@@ -88,8 +89,11 @@
                     class="form-control"
                     col="30"
                     rows="5"
+                    @keyup.alt.s="adicionaTiposervico"
                     v-model="tiposervico.descricao"
+                    v-validate="'required'"
                   ></textarea>
+                  <span>{{ errors.first("descricao") }}</span>
                 </div>
               </div>
             </div>
@@ -98,15 +102,13 @@
             <button
               type="button"
               @click="fecharModal"
-              @keyup.27="fecharModal"
               class="btn btn-default"
             >
-              Fechar
+              Cancelar
             </button>
             <button
               type="button"
-              @click="adicionaTiposervico"
-              @keyup.13="adicionaTiposervico"
+              @keypress.alt.s="adicionaTiposervico"
               class="btn btn-primary"
               :disabled="ativaBotao"
             >
@@ -162,7 +164,10 @@
                       col="30"
                       rows="5"
                       v-model="editartiposervico.descricao"
+                      @keyup.alt.s="atualizaTiposervico"
+                      v-validate="'required'"
                     ></textarea>
+                    <span>{{ errors.first("descricao") }}</span>
                   </div>
                 </div>
               </div>
@@ -171,7 +176,6 @@
               <button
                 type="button"
                 @click="fecharModal"
-                @keyup.27="fecharModal"
                 class="btn btn-default"
               >
                 Cancelar
@@ -179,7 +183,6 @@
               <button
                 type="button"
                 @click="atualizaTiposervico"
-                @keyup.13="atualizaTiposervico"
                 class="btn btn-primary"
                 :disabled="ativaBotao"
               >
@@ -227,10 +230,17 @@ export default {
   },
   computed: {
     ativaBotao() {
-      if (this.tiposervico.tipo.length > 3) {
+      if (
+          this.tiposervico.tipo.length > 3 &&
+          this.tiposervico.descricao.length > 5
+          ) {
         return this.inativo <= false;
       }
-      if (this.editartiposervico.tipo.length > 3){
+      if (
+          
+          this.editartiposervico.tipo.length > 3 &&
+          this.editartiposervico.descricao.length > 5
+          ){
         return this.inativo <= false;
       }
       return this.inativo <= true;
@@ -264,10 +274,12 @@ export default {
           this.lista.push(response.data);
           this.msgs.push(response.data.tipo + " cadastrado com sucesso!");
           this.limpaCampos();
+          $("#tipo").trigger("focus");
         })
         .catch(error => {
-          this.msgs.push(error.response.data.errors);
+          this.msgs.push(this.tiposervico.tipo + ' ' + error.response.data.errors);
         });
+        this.esconde_alerta();
     },
     atualizaTiposervico() {
       axios
@@ -277,16 +289,10 @@ export default {
           descricao: this.editartiposervico.descricao
         })
         .then(response => {
-          $("#editar_modal").modal("hide");
+          $("#modal_editar").modal("hide");
         })
         .catch(error => {
-          //this.errors = [];
-          if (error.response.data.errors.name) {
-            this.errors.push(error.response.data.errors.name[0]);
-          }
-          if (error.response.data.errors.description) {
-            this.errors.push(error.response.data.errors.description[0]);
-          }
+          this.msgs.push(error.response.data.errors);
         });
     },
     excluiTiposervico(index) {
@@ -305,14 +311,35 @@ export default {
       }
     },
     limpaCampos() {
+      const keys = Object.keys(this.tiposervico);
+      keys.forEach(key => (this.tiposervico[key] = ""));
+      // this.esconde_alerta();
       this.errors.clear();
-      this.tiposervico.tipo = "";
-      $("#tipo").trigger("focus");
+      $(".form-control.invalido").removeClass("invalido");
+    },
+    esconde_alerta() {
+      setTimeout(() => {
+        $(".alert").alert("close");
+      }, 5000);
     },
     fecharModal() {
       this.limpaCampos();
       $("#modal_novo").modal("hide");
+      $("#modal_editar").modal('hide');
     }
   }
 };
 </script>
+<style>
+.btn-primary {
+  float: right;
+}
+
+.form-control.invalido {
+  border-color: red;
+}
+
+.form-group span {
+  color: red;
+}
+</style>

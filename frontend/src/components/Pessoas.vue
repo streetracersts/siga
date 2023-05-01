@@ -546,7 +546,7 @@
             <button
               type="button"
               @click="limpaCampos"
-              @keyup.27="limpaCampos"
+              @keydown.esc="limpaCampos"
               class="btn btn-default"
               data-dismiss="modal"
             >
@@ -555,7 +555,7 @@
             <button
               type="button"
               @click="adicionaPessoa"
-              @keyup.13="adicionaPessoa"
+              @keyup.alt.s="adicionaPessoa"
               class="btn btn-primary"
               :disabled="ativarBotao"
             >
@@ -580,7 +580,7 @@
             >
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">EDITAR</h4>
+            <h4 class="modal-title">EDITAR PESSOA</h4>
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" v-if="msgs.length > 0">
@@ -612,7 +612,7 @@
             </button>
             <button
               type="button"
-              @keyup.13="atualizaPessoa"
+              @keyup.alt.s="atualizaPessoa"
               @click="atualizaPessoa"
               class="btn btn-primary"
             >
