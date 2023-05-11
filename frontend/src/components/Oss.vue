@@ -22,7 +22,9 @@
                   <th>Tipo de Serviço</th>
                   <th>Descrição</th>
                   <th>Locais</th>
+                  <th>Data de Saída</th>                  
                   <th>Horário de Saída</th>
+                  <th>Data do Término</th>
                   <th>Horário de término</th>
                   <th>Motorista</th>
                   <th>Status</th>
@@ -32,10 +34,10 @@
                     {{ os.id }}
                   </td>
                   <td>
-                    {{ os.cliente }}
+                    {{ pessoa.apelido }}
                   </td>
                   <td>
-                    {{ os.navio }}
+                    {{ navio.nome }}
                   </td>
                   <td>
                     {{ os.tipo_servico }}
@@ -91,10 +93,11 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" tabindex="-1" role="dialog" id="nova_os_modal">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_novo">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
+            <h4 class="modal-title">ADICIONAR NOVA OS</h4>
             <button
               type="button"
               class="close"
@@ -102,8 +105,7 @@
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
-            </button>
-            <h4 class="modal-title">Adicionar nova OS</h4>
+            </button>            
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" v-if="errors.length > 0">
@@ -255,17 +257,22 @@
                     v-model="os.km_final"
                   />
                 </div>
-                <div class="form-group">
+                <!--div class="form-group col-md-6">
                   <label for="motorista">Motorista:</label>
-                  <input
-                    type="text"
+                  <select
                     name="motorista"
                     id="motorista"
-                    placeholder=""
-                    class="form-control"
-                    v-model="os.motorista"
-                  />
-                </div>
+                    v-model="os.id_pessoa"
+                  >
+                    <option disabled value>Selecione um motorista</option>
+                    <option
+                      v-for="item in pessoa"
+                      :key="item.id"
+                      :value="item.id"
+                      >{{ item.apelido }}</option
+                    >
+                  </select>
+                </div-->
                 <div class="form-group">
                   <label for="ststus">Status do Trabalho:</label>
                   <input
@@ -305,6 +312,7 @@ export default {
   data() {
     return {
       os: {
+        id:"",
         cliente: "",
         navio: "",
         tipo_servico: "",
@@ -341,31 +349,46 @@ export default {
   methods: {
     abreFormAdicionar() {
       this.errors = [];
-      $("#nova_os_modal").modal("show");
+      $("#modal_novo").modal("show");
+      $("#modal_novo").on("shown.bs.modal", function() {
+        $("#cliente").trigger("focus");
+      });
     },
     criaOS() {
       axios
         .post("http://localhost:8000/api/oss", {
-          id_pessoa: this.pessoa.id_pessoa,
-          id_navio: this.navio.id_navio,
-          id_tipo_servico: this.tiposervico.id_tiposervico,
+          id_pessoa: this.os.id_pessoa,
+          id_navio: this.os.id_navio,
+          id_tipo_servico: this.os.id_tiposervico,
           descricao_servico: this.os.descricao_servico,
           locais: this.os.lcoais,
           data_hora_inicio: "2019-05-02 15:00:00",
           data_hora_termino: "2019-05-02 16:00:00",
           km_inicial: this.os.km_inicial,
           km_final: this.os.km_final,
-          motorista: this.os.motorista,
           status_os: 1,
         })
-        .then((response) => {
-          this.reset();
+        .then(response => {
+          this.lista.push(response.data.os);
+          this.msgs.push(response.data.message);
+          //this.os.id = response.data.os.id;
+          // axios
+          // .post('http://localhost:8000/api/oshaspessoas',{
+          //   id_os: this.os.id,
+          //   id_pessoa: this.os.id_pessoa
+          // });
+          this.limpaCampos();
+          $("#cliente").trigger("focus");
 
-          //this.oss.push(response.data.os);
+          // axios.post('http://localhost:8000/api/oshaspessoas',{
 
-          $("#nova_os_modal").modal("hide");
+          // }).then(funstion (response){
+
+          // }).catch(funstion(error){
+
+          // });
         })
-        .catch((error) => {
+        .catch(error => {
           // this.errors = [];
           // if (error.response.data.errors.name) {
           //   this.errors.push(error.response.data.errors.name[0]);
@@ -375,24 +398,33 @@ export default {
           //   this.errors.push(error.response.data.errors.description[0]);
           // }
         });
+        // 
     },
-    reset() {
-      (this.os.cliente = ""),
-      (this.os.navio = ""),
-      (this.os.tipo_servico = ""),
-      (this.os.descricao_servico = ""),
-      (this.os.locais = ""),
-      (this.os.data_inicio = ""),
-      (this.os.hora_inicio = ""),
-      (this.os.data_termino = ""),
-      (this.os.hora_termino = ""),
-      (this.os.km_inicial = ""),
-      (this.os.km_final = ""),
-      (this.os.motorista = ""),
-      (this.os.status = "");
+    limpaCampos() {
+      const keys = Object.keys(this.os);
+      keys.forEach(key => (this.os[key] = ""));
+      //this.tipopessoa.id_tipo_pessoa = 0;
+      this.esconde_alerta();
+      this.errors.clear();
+      $(".form-control.invalido").removeClass("invalido");
     },
+    // reset() {
+    //   (this.os.cliente = ""),
+    //   (this.os.navio = ""),
+    //   (this.os.tipo_servico = ""),
+    //   (this.os.descricao_servico = ""),
+    //   (this.os.locais = ""),
+    //   (this.os.data_inicio = ""),
+    //   (this.os.hora_inicio = ""),
+    //   (this.os.data_termino = ""),
+    //   (this.os.hora_termino = ""),
+    //   (this.os.km_inicial = ""),
+    //   (this.os.km_final = ""),
+    //   (this.os.motorista = ""),
+    //   (this.os.status = "");
+    // },
     exibeOss() {
-      axios.get("http://localhost:8000/api/oss").then((response) => {
+      axios.get("http://localhost:8000/api/oss").then(response => {
         this.lista = response.data;
       });
     },
@@ -411,7 +443,12 @@ export default {
         this.tiposervico = response.data;
       });
     },
-    excluiOss(index) {
+    exibeMotoristas(){
+      axios.get("http://localhost:8000/api/motoristas").then(response => {
+        this.motoristas = response.data
+      })
+    },
+    excluiOs(index) {
       let conf = confirm("Deseja mesmo remover esta os?" );
       if (conf === true) {
         axios

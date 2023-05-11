@@ -46,9 +46,9 @@ export default new Router({
       component: Navios
     },
     {
-        path: "/oss",
-        name: "oss",
-        component: Os
+      path: "/oss",
+      name: "oss",
+      component: Os
     }
   ]
 });

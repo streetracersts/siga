@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
             switch ($errorCode) {
                 case 1062://code dublicate entry 
                     return response([
-                        'errors'=>'Já cadastrado no banco de dados'
+                        'errors'=>'já cadastrado no banco de dados'
                     ],500);    
                     break;
                 case 1364:// you can handel any auther error
