@@ -371,12 +371,12 @@ export default {
         .then(response => {
           this.lista.push(response.data.os);
           this.msgs.push(response.data.message);
-          //this.os.id = response.data.os.id;
-          // axios
-          // .post('http://localhost:8000/api/oshaspessoas',{
-          //   id_os: this.os.id,
-          //   id_pessoa: this.os.id_pessoa
-          // });
+          this.os.id = response.data.os.id;
+          axios
+          .post('http://localhost:8000/api/oshaspessoas',{
+            id_os: this.os.id,
+            id_pessoa: this.os.id_pessoa
+          });
           this.limpaCampos();
           $("#cliente").trigger("focus");
 
