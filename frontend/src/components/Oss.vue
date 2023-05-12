@@ -22,25 +22,26 @@
                   <th>Tipo de Serviço</th>
                   <th>Descrição</th>
                   <th>Locais</th>
-                  <th>Data de Saída</th>                  
-                  <th>Horário de Saída</th>
-                  <th>Data do Término</th>
-                  <th>Horário de término</th>
+                  <th>Data e hora de saída</th>                  
+                  <th>Data e hora de término</th>
+                  <th>Km inicial</th>
+                  <th>Km final</th>
                   <th>Motorista</th>
                   <th>Status</th>
+                  <th>Ações</th>
                 </tr>
                 <tr v-for="(os, index) in lista" :key="os.id">
                   <td>
                     {{ os.id }}
                   </td>
                   <td>
-                    {{ pessoa.apelido }}
+                    {{ os.apelido }}
                   </td>
                   <td>
-                    {{ navio.nome }}
+                    {{ os.nome }}
                   </td>
                   <td>
-                    {{ os.tipo_servico }}
+                    {{ os.tipo }}
                   </td>
                   <td>
                     {{ os.descricao_servico }}
@@ -49,16 +50,10 @@
                     {{ os.locais }}
                   </td>
                   <td>
-                    {{ os.data_saida }}
+                    {{ os.data_hora_inicio }}
                   </td>
                   <td>
-                    {{ os.hora_saida }}
-                  </td>
-                  <td>
-                    {{ os.data_termino }}
-                  </td>
-                  <td>
-                    {{ os.hora_termino }}
+                    {{ os.data_hora_termino }}
                   </td>
                   <td>
                     {{ os.km_inicial }}
@@ -67,10 +62,10 @@
                     {{ os.km_final }}
                   </td>
                   <td>
-                    {{ os.motorista }}
+                    {{ os.id_pessoa }}
                   </td>
                   <td>
-                    {{ os.status }}
+                    {{ os.status_os }}
                   </td>
                   <td>
                     <button
@@ -325,12 +320,16 @@ export default {
         motorista: "",
         status_os: "",
       },
-      pessoa:{},
+      pessoa:{
+        id:"",
+        apelido:""
+      },
       navio:{},
       tiposervico:{},
       editar: {},
       msgs: [],
-      lista: []
+      lista: [],
+      pessoas:[]
     };
   },
   mounted() {
