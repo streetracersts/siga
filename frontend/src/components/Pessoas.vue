@@ -19,32 +19,28 @@
                   <th>Cod.</th>
                   <th>Nome</th>
                   <th>RG</th>
-                  <th>CPF</th>
-                  <th>Gênero</th>
-                  <th>Número CTPS</th>
-                  <th>Série CTPS</th>
-                  <th>Número Pis</th>
-                  <th>Salário</th>
+                  <th>CPF/CNPJ</th>
                   <th>Telefone</th>
                   <th>Endereço</th>
                   <th>Número</th>
-                  <th>Complemento</th>
+                  <th>Comp.</th>
                   <th>Bairro</th>
                   <th>Cidade</th>
                   <th>UF</th>
-                  <th>Nome do pai</th>
-                  <th>Nome da mãe</th>
+                  <th>Ações</th>
+                  <!--th>Nome do pai</th>
+                  <th>Nome da mãe</th-->
                 </tr>
                 <tr v-for="(pessoa, index) in lista" :key="pessoa.id">
                   <td>{{ pessoa.id }}</td>
                   <td>{{ pessoa.apelido }}</td>
                   <td>{{ pessoa.rg }}</td>
                   <td>{{ pessoa.cpf }}</td>
-                  <td>{{ pessoa.genero }}</td>
+                  <!--td>{{ pessoa.genero }}</td>
                   <td>{{ pessoa.numero_ctps }}</td>
                   <td>{{ pessoa.serie_ctps }}</td>
                   <td>{{ pessoa.numero_pis }}</td>
-                  <td>{{ pessoa.salario }}</td>
+                  <td>{{ pessoa.salario }}</td-->
                   <td>{{ pessoa.telefone1 }}</td>
                   <td>{{ pessoa.endereco }}</td>
                   <td>{{ pessoa.numero }}</td>
@@ -52,8 +48,8 @@
                   <td>{{ pessoa.bairro }}</td>
                   <td>{{ pessoa.cidade }}</td>
                   <td>{{ pessoa.uf }}</td>
-                  <td>{{ pessoa.nome_pai }}</td>
-                  <td>{{ pessoa.nome_mae }}</td>
+                  <!--td>{{ pessoa.nome_pai }}</td>
+                  <td>{{ pessoa.nome_mae }}</td-->
                   <td>
                     <button
                       @click="abreEditarModal(index)"
@@ -61,12 +57,12 @@
                     >
                       Editar
                     </button>
-                    <button
+                    <!--button
                       @click="excluiPessoa(index)"
                       class="btn btn-danger btn-xs"
                     >
                       Excluir
-                    </button>
+                    </button-->
                   </td>
                 </tr>
               </tbody>
@@ -569,9 +565,10 @@
     </div>
     <!-- /.modal -->
     <div class="modal fade" tabindex="-1" role="dialog" id="modal_editar">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
+            <h4 class="modal-title">EDITAR PESSOA</h4>
             <button
               type="button"
               class="close"
@@ -580,41 +577,476 @@
             >
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">EDITAR PESSOA</h4>
           </div>
           <div class="modal-body">
-            <div class="alert alert-danger" v-if="msgs.length > 0">
-              <p v-for="msg in msgs" v-bind:key="msgs">{{ msg }}</p>
+            <div
+              class="alert alert-danger alert-dismissible fade show"
+              role="alert"
+              v-if="msgs.length > 0"
+            >
+              <p v-for="msg in msgs" v-bind:key="msg">{{ msg }}</p>
             </div>
-            <div class="form-group">
-              <label>Name:</label>
-              <input
-                type="text"
-                placeholder="Task Name"
-                class="form-control"
-                v-model="atualizaPessoa.nome"
-              />
-            </div>
-            <div class="form-group">
-              <label for="description">Description:</label>
-              <textarea
-                cols="30"
-                rows="5"
-                class="form-control"
-                placeholder="Task Description"
-                v-model="atualizaPessoa.rg"
-              ></textarea>
+            <div class="row">
+              <!-- <div class="col-md-12">
+                <div class="form-group">
+                  <select class="form-select" aria-label = "Selecionar tipo de cliente"
+                    name="tipopessoa"
+                    id="tipopessoa"
+                    v-model="editarpessoa.id_tipo_pessoa"
+                  >
+                    <option disabled value>Selecione uma opção</option>
+                    <option
+                      v-for="item in tipopessoa"
+                      :key="item.id"
+                      :value="item.id"
+                      >{{ item.tipo }}</option
+                    >
+                  </select>
+                </div>
+              </div> -->
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-6">
+                <div class="form-group">
+                  <label for="apelido">Apelido ou nome fantasia: *</label>
+                  <input
+                    type="text"
+                    name="apelido"
+                    id="apelido"
+                    class="form-control"
+                    v-model="editarpessoa.apelido"
+                    v-validate="'required'"
+                  />
+                  <span>{{ errors.first("apelido") }}</span>
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-6">
+                <div class="form-group">
+                  <label for="nome_razao">Nome completo ou Razão Social:</label>
+                  <input
+                    type="text"
+                    name="nome_razao"
+                    id="nome_razao"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.nome_razao"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa === 1" class="col-md-6">
+                <div class="form-group">
+                  <label for="cnpj">CNPJ:</label>
+                  <input
+                    type="text"
+                    name="cnpj"
+                    id="cnpj"
+                    placeholder="__.___.___-_____/__"
+                    class="form-control"
+                    v-model="editarpessoa.cnpj"
+                    v-mask="'##.###.###/####-##'"
+                  />
+                  <span>{{ errors.field }}</span>
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa >= 2" class="col-md-6">
+                <div class="form-group">
+                  <label for="cpf">CPF:</label>
+                  <input
+                    type="text"
+                    name="cpf"
+                    id="cpf"
+                    placeholder="___.___.___-__"
+                    class="form-control"
+                    v-model="editarpessoa.cpf"
+                    v-mask="'###.###.###-##'"
+                  />
+                  <span>{{ errors.field }}</span>
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-2">
+                <div class="form-group">
+                  <label for="cep">CEP:</label>
+                  <input
+                    type="text"
+                    name="cep"
+                    id="cep"
+                    placeholder="_____-___"
+                    class="form-control"
+                    v-model="editarpessoa.cep"
+                    @blur="buscaCep"
+                    v-mask="'#####-###'"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-6">
+                <div class="form-group">
+                  <label for="endereco">Endereço:</label>
+                  <input
+                    type="text"
+                    name="endereco"
+                    id="endereco"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.endereco"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-2">
+                <div class="form-group">
+                  <label for="numero">Número:</label>
+                  <input
+                    type="text"
+                    name="numero"
+                    id="numero"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.numero"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-2">
+                <div class="form-group">
+                  <label for="complemento">Complemento:</label>
+                  <input
+                    type="text"
+                    name="complemento"
+                    id="complemento"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.complemento"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-3">
+                <div class="form-group">
+                  <label for="bairro">Bairro:</label>
+                  <input
+                    type="text"
+                    name="bairro"
+                    id="bairro"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.bairro"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-4">
+                <div class="form-group">
+                  <label for="cidade">Cidade:</label>
+                  <input
+                    type="text"
+                    name="cidade"
+                    id="cidade"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.cidade"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-2">
+                <div class="form-group">
+                  <label for="uf">UF:</label>
+                  <input
+                    type="text"
+                    name="uf"
+                    id="uf"
+                    placeholder=""
+                    class="form-control"
+                    v-model="editarpessoa.uf"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-3">
+                <div class="form-group">
+                  <label for="pais">País:</label>
+                  <input
+                    type="text"
+                    name="pais"
+                    id="pais"
+                    placeholder=""
+                    class="form-control"
+                    v-model="editarpessoa.pais"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-3">
+                <div class="form-group">
+                  <label for="telefone">Telefone: *</label>
+                  <input
+                    type="text"
+                    name="telefone"
+                    id="telefone"
+                    placeholder="()____-____"
+                    class="form-control"
+                    v-model="editarpessoa.telefone1"
+                    v-validate="'required'"
+                    v-mask="['(##)####-####', '(##)#####-####']"
+                  />
+                  <span>{{ errors.first("telefone") }}</span>
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-3">
+                <div class="form-group">
+                  <label for="telefone2">Telefone 2:</label>
+                  <input
+                    type="text"
+                    name="telefone2"
+                    id="telefone2"
+                    placeholder="()____-____"
+                    class="form-control"
+                    v-model="editarpessoa.telefone2"
+                    v-mask="['(##)####-####', '(##)#####-####']"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-6">
+                <div class="form-group">
+                  <label for="email">Email:</label>
+                  <input
+                    type="text"
+                    name="email"
+                    id="email"
+                    placeholder="email@domínio"
+                    class="form-control"
+                    v-model="editarpessoa.email"
+                    v-validate="'email'"
+                  />
+                  <span>{{ errors.first("email") }}</span>
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa >= 2" class="col-md-6">
+                <div class="form-group">
+                  <label for="rg">Identidade:</label>
+                  <input
+                    type="text"
+                    name="rg"
+                    id="rg"
+                    class="form-control"
+                    v-model="editarpessoa.rg"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa >= 2" class="col-md-6">
+                <div class="form-group">
+                  <label for="o_emissor">Orgão emissor:</label>
+                  <input
+                    type="text"
+                    name="o_emissor"
+                    id="o_emissor"
+                    class="form-control"
+                    v-model="editarpessoa.o_emissor"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa >= 2" class="col-md-6">
+                <div class="form-group">
+                  <label for="data_emissao">Data da emissão:</label>
+                  <input
+                    type="text"
+                    name="data_emissao"
+                    id="data_emissao"
+                    placeholder="__/__/____"
+                    class="form-control"
+                    v-model="editarpessoa.data_emissao"
+                    v-mask="'##/##/####'"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa >= 2" class="col-md-6">
+                <div class="form-group">
+                  <label for="rg">Identidade:</label>
+                  <input
+                    type="text"
+                    name="rg"
+                    id="rg"
+                    class="form-control"
+                    v-model="editarpessoa.rg"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa >= 2" calss="col-md-2">
+                <div class="form-group">
+                  <label for="o_emissor">Orgão emissor:</label>
+                  <input
+                    type="text"
+                    name="o_emissor"
+                    id="o_emissor"
+                    class="form-control"
+                    v-model="editarpessoa.o_emissor"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa >= 2" ckass="col-md-2">
+                <div class="form-group">
+                  <label for="data_emissao">Data da emissão:</label>
+                  <input
+                    type="text"
+                    name="data_emissao"
+                    id="data_emissao"
+                    placeholder="__/__/____"
+                    class="form-control"
+                    v-model="editarpessoa.data_emissao"
+                    v-mask="'##/##/####'"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-4">
+                <div class="form-group">
+                  <label for="cnh">CNH:</label>
+                  <input
+                    type="text"
+                    name="cnh"
+                    id="cnh"
+                    class="form-control"
+                    v-model="editarpessoa.cnh"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-1">
+                <div class="form-group">
+                  <label for="cnh_categoria">Categoria CNH:</label>
+                  <input
+                    type="text"
+                    name="cnh_categoria"
+                    id="cnh_categoria"
+                    class="form-control"
+                    v-model="editarpessoa.cnh_categoria"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-2">
+                <div class="form-group">
+                  <label for="genero">Gênero:</label>
+                  <select name="genero" id="genero" v-model="tipopessoa.genero">
+                    <option disabled value>Selecione uma opção</option>
+                    <option value="0">Feminino</option>
+                    <option value="1">Masculino</option>
+                  </select>
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa >= 2" class="col-md-3">
+                <div class="form-group">
+                  <label for="data_nascimento">Data de Nascimento:</label>
+                  <input
+                    type="text"
+                    name="data_nascimento"
+                    id="data_nascimento"
+                    placeholder="__/__/___"
+                    class="form-control"
+                    v-model="editarpessoa.data_nascimento"
+                    v-mask="'##/##/####'"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-2">
+                <div class="form-group">
+                  <label for="numeroCtps">Número CTPS:</label>
+                  <input
+                    type="text"
+                    name="numeroCtps"
+                    id="numeroCtps"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.numero_ctps"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-2">
+                <div class="form-group">
+                  <label for="serieCtps">Série CTPS:</label>
+                  <input
+                    type="text"
+                    name="serieCtps"
+                    id="serieCtps"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.serie_ctps"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-3">
+                <div class="form-group">
+                  <label for="pis">Número Pis:</label>
+                  <input
+                    type="text"
+                    name="pis"
+                    id="pis"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.pis"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-3">
+                <div class="form-group">
+                  <label for="salario">Salário:</label>
+                  <input
+                    type="text"
+                    name="salario"
+                    id="salario"
+                    placeholder="0,00"
+                    class="form-control"
+                    v-model="editarpessoa.salario"
+                    v-mask="'#,##'"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-3">
+                <div class="form-group">
+                  <label for="nomePai">Nome do pai:</label>
+                  <input
+                    type="text"
+                    name="nomePai"
+                    id="nomePai"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.nome_pai"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa == 3" class="col-md-3">
+                <div class="form-group">
+                  <label for="nomeMae">Nome do mãe:</label>
+                  <input
+                    type="text"
+                    name="nomeMae"
+                    id="nomeMae"
+                    placeholder
+                    class="form-control"
+                    v-model="editarpessoa.nome_mae"
+                  />
+                </div>
+              </div>
+              <div v-if="editarpessoa.id_tipo_pessoa > 0" class="col-md-6">
+                <div class="form-group">
+                  <label for="observacoes">Observações Gerais:</label>
+                  <textarea
+                    name="observacoes"
+                    id="observacoes"
+                    cols="30"
+                    rows="5"
+                    class="form-control"
+                    placeholder="Observações Gerais"
+                    v-model="editarpessoa.observacoes"
+                  ></textarea>
+                </div>
+              </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">
+            <button
+              type="button"
+              @click="limpaCampos"
+              @keydown.esc="limpaCampos"
+              class="btn btn-default"
+              data-dismiss="modal"
+            >
               Cancelar
             </button>
             <button
               type="button"
-              @keyup.alt.s="atualizaPessoa"
               @click="atualizaPessoa"
+              @keyup.alt.s="atualizaPessoa"
               class="btn btn-primary"
+              :disabled="ativarBotao"
             >
               Salvar
             </button>
@@ -624,7 +1056,7 @@
       </div>
       <!-- /.modal-dialog -->
     </div>
-    <!--/.modal-->
+    <!-- /.modal -->
   </div>
 </template>
 
@@ -637,6 +1069,40 @@ export default {
     return {
       inativo: true,
       pessoa: {
+        id: "",
+        apelido: "",
+        nome_razao: "",
+        id_tipo_pessoa: "",
+        rg: "",
+        o_emissor: "",
+        data_emissao: "",
+        cnh: "",
+        cnh_categoria: "",
+        cpf: "",
+        genero: "",
+        data_nascimento: "",
+        numero_ctps: "",
+        serie_ctps: "",
+        pis: "",
+        im: "",
+        ie: "",
+        salario: "",
+        numero_pis: "",
+        cep: "",
+        endereco: "",
+        numero: "",
+        complemento: "",
+        bairro: "",
+        cidade: "",
+        uf: "",
+        nome_pai: "",
+        nome_mae: "",
+        telefone1: "",
+        telefone2: "",
+        status: "",
+        observacoes: ""
+      },
+      editarpessoa: {
         id: "",
         apelido: "",
         nome_razao: "",
@@ -703,6 +1169,12 @@ export default {
       ) {
         return this.inativo <= false;
       }
+      if (
+        this.editarpessoa.apelido.length > 0 &&
+        this.editarpessoa.telefone1.length >= 13
+      ) {
+        return this.inativo <= false;
+      }
       return this.inativo <= true;
     }
   },
@@ -721,12 +1193,12 @@ export default {
           nome_razao: this.pessoa.nome_razao,
           rg: this.pessoa.rg,
           o_emissor: this.pessoa.o_emissor,
-          data_emissao: this.dt_emissao,
+          data_emissao: this.pessoa.dt_emissao,
           cnh: this.pessoa.cnh,
           cnh_categoria: this.pessoa.cnh_categoria,
           cpf: this.pessoa.cpf,
           genero: this.pessoa.genero,
-          data_nascimento: this.dt_nascimento,
+          data_nascimento: this.pessoa.dt_nascimento,
           n_ctps: this.pessoa.numero_ctps,
           serie_ctps: this.pessoa.serie_ctps,
           pis: this.pessoa.pis,
@@ -798,16 +1270,48 @@ export default {
     abreEditarModal(index) {
       //this.errors = [];
       $("#modal_editar").modal("show");
-      this.editar = this.lista[index];
+      this.editarpessoa = this.lista[index];
     },
     atualizaPessoa() {
+      console.log(this.editarpessoa.id);
       axios
-        .patch("/pessoas/" + this.editar.id, {
-          apelido: this.atualizaPessoa.apelido,
-          nome_razao: this.atualizaPessoa.nome_razao
+        .patch("http://localhost:8000/api/pessoa/" + this.editarpessoa.id, {
+          id: this.editarpessoa.id,
+          id_tipo_pessoa: this.editarpessoa.id_tipo_pessoa,
+          apelido: this.editarpessoa.apelido,
+          nome_razao: this.editarpessoa.nome_razao,
+          rg: this.editarpessoa.rg,
+          o_emissor: this.editarpessoa.o_emissor,
+          data_emissao: this.editarpessoa.dt_emissao,
+          cnh: this.editarpessoa.cnh,
+          cnh_categoria: this.editarpessoa.cnh_categoria,
+          cpf: this.editarpessoa.cpf,
+          genero: this.editarpessoa.genero,
+          data_nascimento: this.editarpessoa.dt_nascimento,
+          n_ctps: this.editarpessoa.numero_ctps,
+          serie_ctps: this.editarpessoa.serie_ctps,
+          pis: this.editarpessoa.pis,
+          im: this.editarpessoa.im,
+          ie: this.editarpessoa.ie,
+          salario: this.editarpessoa.salario,
+          cep: this.editarpessoa.cep,
+          endereco: this.editarpessoa.endereco,
+          numero: this.editarpessoa.numero,
+          complemento: this.editarpessoa.complemento,
+          bairro: this.editarpessoa.bairro,
+          cidade: this.editarpessoa.cidade,
+          uf: this.editarpessoa.uf,
+          pais: this.editarpessoa.pais,
+          nome_pai: this.editarpessoa.nome_pai,
+          nome_mae: this.editarpessoa.nome_mae,
+          telefone1: this.editarpessoa.telefone1,
+          telefone2: this.editarpessoa.telefone2,
+          email: this.editarpessoa.email,
+          obs: this.editarpessoa.observacoes,
+          status: 1
         })
         .then(response => {
-          $("#update_task_model").modal("hide");
+          $("#modal_editar").modal("hide");
         })
         .catch(error => {
           this.errors = [];
@@ -823,7 +1327,7 @@ export default {
     limpaCampos() {
       const keys = Object.keys(this.pessoa);
       keys.forEach(key => (this.pessoa[key] = ""));
-      this.tipopessoa.id_tipo_pessoa = 0;
+      this.pessoa.id_tipo_pessoa = 0;
       this.esconde_alerta();
       this.errors.clear();
       $(".form-control.invalido").removeClass("invalido");

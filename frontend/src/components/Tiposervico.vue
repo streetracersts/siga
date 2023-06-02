@@ -261,7 +261,7 @@ export default {
     abreEditarModal(index) {
       //this.errors = [];
       $("#modal_editar").modal("show");
-      console.log (this.lista[index])
+      //console.log (this.lista[index])
       this.editartiposervico = this.lista[index];
     },
     adicionaTiposervico() {

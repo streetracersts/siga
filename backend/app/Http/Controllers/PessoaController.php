@@ -108,33 +108,36 @@ class PessoaController extends Controller
         switch ($tipo_pessoa){
             case 0:
                 $this->validate($request, [
-                    'tipo_pessoa' => 'required|max:1',
-                    'aoelido' => 'required|max:255',
+                    'id_tipo_pessoa' => 'required|max:1',
+                    'apelido' => 'required|max:255',
                     'cep' => 'required',
                     'telefone1' => 'required:11',
                 ]);
-                $pessoa->tipo_pessoa = request('tipo_pessoa');
-                $pessoa->apelido = request('apelido');
-                $pessoa->nome_razao = request('nome_razao');
-                $pessoa->cnpj = request('cnpj');
-                $pessoa->im = request('im');
-                $pessoa->ie = request('ie');
-                $pessoa->cep = request('cep');
-                $pessoa->endereco = request('endereco');
-                $pessoa->numero = request('numero');
-                $pessoa->complemento = request('complemento');
-                $pessoa->bairro = request('bairro');
-                $pessoa->cidade = request('cidade');
-                $pessoa->uf = request('uf');
-                $pessoa->pais = request('pais');
-                $pessoa->telefone_fixo = request('telefone_fixo');
-                $pessoa->email = request('email');
-                $pessoa->obs = request('obs');
-                //'user_id'     => Auth::user()->id
+                $pessoa->update($request->all());
+                return response()->json("Registro atualizado com sucesso.", 200);
+                // $pessoa->id = request('id');
+                // $pessoa->id_tipo_pessoa = request('id_tipo_pessoa');
+                // $pessoa->apelido = request('apelido');
+                // $pessoa->nome_razao = request('nome_razao');
+                // $pessoa->cnpj = request('cnpj');
+                // $pessoa->im = request('im');
+                // $pessoa->ie = request('ie');
+                // $pessoa->cep = request('cep');
+                // $pessoa->endereco = request('endereco');
+                // $pessoa->numero = request('numero');
+                // $pessoa->complemento = request('complemento');
+                // $pessoa->bairro = request('bairro');
+                // $pessoa->cidade = request('cidade');
+                // $pessoa->uf = request('uf');
+                // $pessoa->pais = request('pais');
+                // $pessoa->telefone_fixo = request('telefone_fixo');
+                // $pessoa->email = request('email');
+                // $pessoa->obs = request('obs');
+                // //'user_id'     => Auth::user()->id
             break;
             case 1:
                 $this->validate($request, [
-                    'tipo_pessoa' => 'required|max:1',
+                    'id_tipo_pessoa' => 'required|max:1',
                     'nome' => 'required|max:255',
                     'cpf' => 'required|max:14',
                     'rg' => 'required|max:50',
@@ -149,28 +152,30 @@ class PessoaController extends Controller
                     'pais' => 'required:100',
                     'celular' => 'required:10'
                 ]);
-                $pessoa->tipo_pessoa = request('tipo_pessoa');
-                $pessoa->nome = request('nome');
-                $pessoa->cpf = request('cpf');
-                $pessoa->rg = request('rg');
-                $pessoa->o_emissor = request('o_emissor');
-                $pessoa->cep = request('ie');
-                $pessoa->endereco = request('cep');
-                $pessoa->numero = request('numero');
-                $pessoa->complemento = request('complemento');
-                $pessoa->bairro = request('bairro');
-                $pessoa->cidade = request('cidade');
-                $pessoa->uf = request('uf');
-                $pessoa->pais = request('pais');
-                $pessoa->telefone_fixo = request('telefone_fixo');
-                $pessoa->celular = request('celular');
-                $pessoa->email = request('email');
-                $pessoa->obs = request('obs');
+                $pessoa = Pessoa::create($request->all());
+                return response()->json("Registro atualizado com sucesso.", 200);
+                // $pessoa->id_tipo_pessoa = request('id_tipo_pessoa');
+                // $pessoa->nome = request('nome');
+                // $pessoa->cpf = request('cpf');
+                // $pessoa->rg = request('rg');
+                // $pessoa->o_emissor = request('o_emissor');
+                // $pessoa->cep = request('ie');
+                // $pessoa->endereco = request('cep');
+                // $pessoa->numero = request('numero');
+                // $pessoa->complemento = request('complemento');
+                // $pessoa->bairro = request('bairro');
+                // $pessoa->cidade = request('cidade');
+                // $pessoa->uf = request('uf');
+                // $pessoa->pais = request('pais');
+                // $pessoa->telefone_fixo = request('telefone_fixo');
+                // $pessoa->celular = request('celular');
+                // $pessoa->email = request('email');
+                // $pessoa->obs = request('obs');
                 //'user_id'     => Auth::user()->id
             break;
             case 2:
                 $this->validate($request, [
-                    'tipo_pessoa' => 'required|max:1',
+                    'id_tipo_pessoa' => 'required|max:1',
                     'nome' => 'required|max:255',
                     'cpf' => 'required|max:14',
                     'rg' => 'required|max:50',
@@ -184,27 +189,29 @@ class PessoaController extends Controller
                     'uf' => 'required:2',
                     'pais' => 'required:100',
                 ]);
-                $pessoa->tipo_pessoa = request('tipo_pessoa');
-                $pessoa->nome = request('nome');
-                $pessoa->cpf = request('cpf');
-                $pessoa->rg = request('rg');
-                $pessoa->o_emissor = request('o_emissor');
-                $pessoa->cnh = request('cnh');
-                $pessoa->cnh_categoria = request('cnh_categoria');
-                $pessoa->n_ctps = request('n_ctps');
-                $pessoa->pis = request('pis');
-                $pessoa->cep = request('ie');
-                $pessoa->endereco = request('cep');
-                $pessoa->numero = request('numero');
-                $pessoa->complemento = request('complemento');
-                $pessoa->bairro = request('bairro');
-                $pessoa->cidade = request('cidade');
-                $pessoa->uf = request('uf');
-                $pessoa->pais = request('pais');
-                $pessoa->telefone_fixo = request('telefone_fixo');
-                $pessoa->celular = request('celular');
-                $pessoa->email = request('email');
-                $pessoa->obs = request('obs');
+                $pessoa = Pessoa::create($request->all());
+                return response()->json("Registro atualizado com sucesso.", 200);
+                // $pessoa->id_tipo_pessoa = request('id_tipo_pessoa');
+                // $pessoa->nome = request('nome');
+                // $pessoa->cpf = request('cpf');
+                // $pessoa->rg = request('rg');
+                // $pessoa->o_emissor = request('o_emissor');
+                // $pessoa->cnh = request('cnh');
+                // $pessoa->cnh_categoria = request('cnh_categoria');
+                // $pessoa->n_ctps = request('n_ctps');
+                // $pessoa->pis = request('pis');
+                // $pessoa->cep = request('ie');
+                // $pessoa->endereco = request('cep');
+                // $pessoa->numero = request('numero');
+                // $pessoa->complemento = request('complemento');
+                // $pessoa->bairro = request('bairro');
+                // $pessoa->cidade = request('cidade');
+                // $pessoa->uf = request('uf');
+                // $pessoa->pais = request('pais');
+                // $pessoa->telefone_fixo = request('telefone_fixo');
+                // $pessoa->celular = request('celular');
+                // $pessoa->email = request('email');
+                // $pessoa->obs = request('obs');
                 //'user_id'     => Auth::user()->id
             break;
             default:
@@ -213,10 +220,10 @@ class PessoaController extends Controller
                 ],200);
             break;
         }
-        $pessoa->save();
-        return response()->json([
-            'message' => 'Registro atualizado com sucesso!'
-        ], 200);
+        // $pessoa->save();
+        // return response()->json([
+        //     'message' => 'Registro atualizado com sucesso!'
+        // ], 200);
     }
 
     /**

@@ -62,7 +62,7 @@
                     {{ os.km_final }}
                   </td>
                   <td>
-                    {{ os.id_pessoa }}
+                    {{ os.id_motorista }}
                   </td>
                   <td>
                     {{ os.status_os }}
@@ -252,12 +252,12 @@
                     v-model="os.km_final"
                   />
                 </div>
-                <!--div class="form-group col-md-6">
+                <div class="form-group col-md-6">
                   <label for="motorista">Motorista:</label>
                   <select
                     name="motorista"
                     id="motorista"
-                    v-model="os.id_pessoa"
+                    v-model="os.id_motorista"
                   >
                     <option disabled value>Selecione um motorista</option>
                     <option
@@ -267,7 +267,7 @@
                       >{{ item.apelido }}</option
                     >
                   </select>
-                </div-->
+                </div>
                 <div class="form-group">
                   <label for="ststus">Status do Trabalho:</label>
                   <input
@@ -317,7 +317,7 @@ export default {
         data_hora_termino: "",
         km_inicial: "",
         km_final: "",
-        motorista: "",
+        id_motorista: "",
         status_os: "",
       },
       pessoa:{
@@ -360,11 +360,12 @@ export default {
           id_navio: this.os.id_navio,
           id_tipo_servico: this.os.id_tiposervico,
           descricao_servico: this.os.descricao_servico,
-          locais: this.os.lcoais,
+          locais: this.os.locais,
           data_hora_inicio: "2019-05-02 15:00:00",
           data_hora_termino: "2019-05-02 16:00:00",
           km_inicial: this.os.km_inicial,
           km_final: this.os.km_final,
+          id_motorista: this.os.id_motorista,
           status_os: 1,
         })
         .then(response => {

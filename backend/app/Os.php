@@ -22,7 +22,7 @@ class Os extends Model
         'data_hora_termino',
         'km_inicial',
         'km_final',
-        'motorista',
+        'id_motorista',
         'status_os'
     ];
 }
