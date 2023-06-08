@@ -1137,7 +1137,7 @@ export default {
         observacoes: ""
       },
       tipopessoa: {},
-      editar: {},
+      //editar: {},
       msgs: [],
       lista: []
     };
@@ -1154,12 +1154,20 @@ export default {
     this.exibeTipo_pessoa();
   },
   computed: {
-    dt_nascimento() {
+    a_dt_nascimento() {
       let nascimento = this.pessoa.data_nascimento.split("/");
       return nascimento[2] + "-" + nascimento[1] + "-" + nascimento[0];
     },
-    dt_emissao() {
+    a_dt_emissao() {
       let emissao = this.pessoa.data_emissao.split("/");
+      return emissao[2] + "-" + emissao[1] + "-" + emissao[0];
+    },
+    e_dt_nascimento() {
+      let nascimento = this.editarpessoa.data_nascimento.split("/");
+      return nascimento[2] + "-" + nascimento[1] + "-" + nascimento[0];
+    },
+    e_dt_emissao() {
+      let emissao = this.editarpessoa.data_emissao.split("/");
       return emissao[2] + "-" + emissao[1] + "-" + emissao[0];
     },
     ativarBotao() {
@@ -1193,12 +1201,12 @@ export default {
           nome_razao: this.pessoa.nome_razao,
           rg: this.pessoa.rg,
           o_emissor: this.pessoa.o_emissor,
-          data_emissao: this.pessoa.dt_emissao,
+          data_emissao: this.a_dt_emissao,
           cnh: this.pessoa.cnh,
           cnh_categoria: this.pessoa.cnh_categoria,
           cpf: this.pessoa.cpf,
           genero: this.pessoa.genero,
-          data_nascimento: this.pessoa.dt_nascimento,
+          data_nascimento: this.a_dt_nascimento,
           n_ctps: this.pessoa.numero_ctps,
           serie_ctps: this.pessoa.serie_ctps,
           pis: this.pessoa.pis,
@@ -1282,12 +1290,12 @@ export default {
           nome_razao: this.editarpessoa.nome_razao,
           rg: this.editarpessoa.rg,
           o_emissor: this.editarpessoa.o_emissor,
-          data_emissao: this.editarpessoa.dt_emissao,
+          data_emissao: this.editarpessoa.e_dt_emissao,
           cnh: this.editarpessoa.cnh,
           cnh_categoria: this.editarpessoa.cnh_categoria,
           cpf: this.editarpessoa.cpf,
           genero: this.editarpessoa.genero,
-          data_nascimento: this.editarpessoa.dt_nascimento,
+          data_nascimento: this.e_dt_nascimento,
           n_ctps: this.editarpessoa.numero_ctps,
           serie_ctps: this.editarpessoa.serie_ctps,
           pis: this.editarpessoa.pis,

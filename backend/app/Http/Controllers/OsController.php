@@ -17,11 +17,11 @@ class OsController extends Controller
 
     public function index()
     {
-        $oss = Os::join('pessoas', 'oss.id_pessoa', '=', 'pessoas.id')
-        ->join('pessoas as motoristas','oss.id_motorista', '=', 'motoristas.id')
-        ->join('navios', 'oss.id_navio', '=','navios.id')
+        $oss = Os::leftJoin('pessoas as cliente', 'oss.id_pessoa', '=', 'cliente.id')
+        ->leftJoin('pessoas as motorista','oss.id_motorista', '=', 'motorista.id')
+        ->join('navios as navio', 'oss.id_navio', '=','navio.id')
         ->join('tipo_servico', 'oss.id_tipo_servico', 'tipo_servico.id')
-        ->get(['oss.*', 'pessoas.apelido', 'navios.nome','tipo_servico.tipo', 'motoristas.apelido']);
+        ->get(['oss.*', 'cliente.apelido', 'navio.nome','tipo_servico.tipo', 'motorista.apelido as motorista']);
         {return response()->json(
            $oss);
         }

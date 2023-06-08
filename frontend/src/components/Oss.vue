@@ -21,13 +21,9 @@
                   <th>Navio</th>
                   <th>Tipo de Serviço</th>
                   <th>Descrição</th>
-                  <th>Locais</th>
                   <th>Data e hora de saída</th>                  
                   <th>Data e hora de término</th>
-                  <th>Km inicial</th>
-                  <th>Km final</th>
                   <th>Motorista</th>
-                  <th>Status</th>
                   <th>Ações</th>
                 </tr>
                 <tr v-for="(os, index) in lista" :key="os.id">
@@ -47,25 +43,13 @@
                     {{ os.descricao_servico }}
                   </td>
                   <td>
-                    {{ os.locais }}
-                  </td>
-                  <td>
                     {{ os.data_hora_inicio }}
                   </td>
                   <td>
                     {{ os.data_hora_termino }}
                   </td>
                   <td>
-                    {{ os.km_inicial }}
-                  </td>
-                  <td>
-                    {{ os.km_final }}
-                  </td>
-                  <td>
-                    {{ os.id_motorista }}
-                  </td>
-                  <td>
-                    {{ os.status_os }}
+                    {{ os.motorista }}
                   </td>
                   <td>
                     <button
@@ -299,7 +283,7 @@
       <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal_eidtar">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_editar">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -326,7 +310,7 @@
                   <select
                     name="cliente"
                     id="cliente"
-                    v-model="os.id_pessoa"
+                    v-model="editar.id_pessoa"
                   >
                     <option disabled value>Selecione uma opção</option>
                     <option
@@ -342,7 +326,7 @@
                   <select
                     name="navio"
                     id="navio"
-                    v-model="os.id_navio"
+                    v-model="editar.id_navio"
                   >
                     <option disabled value>Selecione uma opção</option>
                     <option
@@ -358,7 +342,7 @@
                   <select
                     name="tiposervico"
                     id="tiposervico"
-                    v-model="os.id_tiposervico"
+                    v-model="editar.id_tipo_servico"
                   >
                     <option disabled value>Selecione uma opção</option>
                     <option
@@ -495,7 +479,7 @@
             <button type="button" @click="EditaOS" class="btn btn-primary">
               Salvar
             </button>
-            <button type="button" @click="abreFormImprimir" class="btn btn-default">
+            <button type="button" class="btn btn-default">
               Imprimir
             </button>
           </div>
@@ -519,7 +503,7 @@ export default {
         id:"",
         cliente: "",
         navio: "",
-        tipo_servico: "",
+        id_tiposervico: "",
         descricao_servico: "",
         locais: "",
         data_hora_saida: "",
@@ -530,9 +514,10 @@ export default {
         status_os: ""
       },
       editar: {
+        id:"",
         cliente: "",
         navio: "",
-        tipo_servico: "",
+        id_tipo_servico: "",
         descricao_servico: "",
         locais: "",
         data_hora_saida: "",
@@ -548,7 +533,6 @@ export default {
       },
       navio:{},
       tiposervico:{},
-      editar: {},
       msgs: [],
       lista: [],
       pessoas:[]
@@ -568,12 +552,20 @@ export default {
     this.exibeServicos();
   },
   computed:{
-    dt_inicio() {
-      let d_inicio = this.os.data_inico.split("/");
+    a_dt_inicio() {
+      let d_inicio = this.os.data_inicio.split("/");
       return d_inicio[2] + "-" + d_inicio[1] + "-" + d_inicio[0];
     },
-    dt_termino() {
+    a_dt_termino() {
       let d_termino = this.os.data_termino.split("/");
+      return d_termino[2] + "-" + d_termino[1] + "-" + d_termino[0];
+    },
+    e_dt_inicio() {
+      let d_inicio = this.editar.data_inico.split("/");
+      return d_inicio[2] + "-" + d_inicio[1] + "-" + d_inicio[0];
+    },
+    e_dt_termino() {
+      let d_termino = this.editar.data_termino.split("/");
       return d_termino[2] + "-" + d_termino[1] + "-" + d_termino[0];
     },
     ativarBotao() {
@@ -593,9 +585,11 @@ export default {
       $("#modal_novo").modal("show");
     },
     abreModalEditar(index) {
+      console.log(index);
       //this.errors = [];
       $("#modal_editar").modal("show");
       this.editar = this.lista[index];
+      console.log(this.editar)
     },
     abreModalImprimir(index){
       $("#modal_imprimir").modal("show");
@@ -608,8 +602,8 @@ export default {
           id_tipo_servico: this.os.id_tiposervico,
           descricao_servico: this.os.descricao_servico,
           locais: this.os.lcoais,
-          data_hora_inicio: dt_inicio + " " + this.os.hora_inicio + ":00",
-          data_hora_termino: dt_termino + " " + this.os.hora.termino + ":00",
+          data_hora_inicio: this.a_dt_inicio + " " + this.os.hora_inicio + ":00",
+          data_hora_termino: this.a_dt_termino + " " + this.os.hora_termino + ":00",
           km_inicial: this.os.km_inicial,
           km_final: this.os.km_final,
           id_motorista: this.os.id_motorista,
@@ -629,7 +623,7 @@ export default {
 
           // axios.post('http://localhost:8000/api/oshaspessoas',{
 
-          $("#modal_novo").modal("hide");
+          //$("#modal_novo").modal("hide");
         })
         .catch(error => {
           // this.errors = [];
@@ -648,11 +642,11 @@ export default {
         .patch("http://localhost:8000/api/oss/" + this.editar.id, {
           id_pessoa: this.editar.id_pessoa,
           id_navio: this.editar.id_navio,
-          id_tipo_servico: this.editar.id_tiposervico,
+          id_tipo_servico: this.editar.id_tipo_servico,
           descricao_servico: this.editar.descricao_servico,
-          locais: this.editar.lcoais,
-          data_hora_inicio: dt_inicio + " " + this.os.hora_inicio + ":00",
-          data_hora_termino: dt_termino + " " + this.os.hora.termino + ":00",
+          locais: this.editar.locais,
+          data_hora_inicio: this.e_dt_inicio + " " + this.os.hora_inicio + ":00",
+          data_hora_termino: this.e_dt_termino + " " + this.os.hora_termino + ":00",
           km_inicial: this.editar.km_inicial,
           km_final: this.editar.km_final,
           motorista: this.editar.motorista,
