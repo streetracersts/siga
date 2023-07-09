@@ -1155,35 +1155,28 @@ export default {
   },
   computed: {
     a_dt_nascimento() {
-      let nascimento = this.pessoa.data_nascimento.split("/");
-      return nascimento[2] + "-" + nascimento[1] + "-" + nascimento[0];
+      if (this.pessoa.data_nascimento != ''){
+        let nascimento = this.pessoa.data_nascimento.split("/");
+        return nascimento[2] + "-" + nascimento[1] + "-" + nascimento[0];
+      }
     },
     a_dt_emissao() {
-      let emissao = this.pessoa.data_emissao.split("/");
-      return emissao[2] + "-" + emissao[1] + "-" + emissao[0];
+      if (this.pessoa.data_emissao != ''){
+        let emissao = this.pessoa.data_emissao.split("/");
+        return emissao[2] + "-" + emissao[1] + "-" + emissao[0];
+      }
     },
     e_dt_nascimento() {
-      let nascimento = this.editarpessoa.data_nascimento.split("/");
-      return nascimento[2] + "-" + nascimento[1] + "-" + nascimento[0];
+      if (this.pessoa.data_nascimento !=''){
+        let nascimento = this.editarpessoa.data_nascimento.split("/");
+        return nascimento[2] + "-" + nascimento[1] + "-" + nascimento[0];
+      }
     },
     e_dt_emissao() {
-      let emissao = this.editarpessoa.data_emissao.split("/");
-      return emissao[2] + "-" + emissao[1] + "-" + emissao[0];
-    },
-    ativarBotao() {
-      if (
-        this.pessoa.apelido.length > 0 &&
-        this.pessoa.telefone1.length >= 13
-      ) {
-        return this.inativo <= false;
+      if (this.editarpessoa.data_emissao){
+        let emissao = this.editarpessoa.data_emissao.split("/");
+        return emissao[2] + "-" + emissao[1] + "-" + emissao[0];
       }
-      if (
-        this.editarpessoa.apelido.length > 0 &&
-        this.editarpessoa.telefone1.length >= 13
-      ) {
-        return this.inativo <= false;
-      }
-      return this.inativo <= true;
     }
   },
   methods: {

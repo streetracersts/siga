@@ -500,18 +500,21 @@ export default {
   data() {
     return {
       os: {
-        id:"",
+        // id:"",
         cliente: "",
         navio: "",
         id_tiposervico: "",
-        descricao_servico: "",
-        locais: "",
-        data_hora_saida: "",
-        data_hora_termino: "",
-        km_inicial: "",
-        km_final: "",
-        motorista: "",
-        status_os: ""
+        // descricao_servico: "",
+        // locais: "",
+        data_hora_inicio:'',
+        data_inicio: "00/00/0000",
+        hora_inicio: "00:00",
+        data_termino: "00/00/0000",
+        hora_termino: "00:00"
+        // km_inicial: "",
+        // km_final: "",
+        // motorista: "",
+        // status_os: ""
       },
       editar: {
         id:"",
