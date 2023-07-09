@@ -7,6 +7,13 @@ import pt from "vee-validate/dist/locale/pt_BR";
 import VeeValidate, { Validator } from "vee-validate";
 import VueTheMask from "vue-the-mask";
 import pt_BR from "vee-validate/dist/locale/pt_BR";
+import moment from 'moment';
+
+Vue.filter('formatDate', function(value) {
+    if (value) {
+        return moment(String(value)).format('MM/DD/YYYY hh:mm')
+    }
+});
 
 //window.jQuery = require('jquery') // << import jquery global
 require("bootstrap");
