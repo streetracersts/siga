@@ -40,10 +40,10 @@
                     {{ os.tipo }}
                   </td>
                   <td>
-                    {{ os.descricao_servico }}
+                    {{ toTime(os.descricao_servico) }}
                   </td>
                   <td>
-                    {{ os.data_hora_inicio }}
+                    {{ toTime(os.data_hora_inicio) }}
                   </td>
                   <td>
                     {{ os.data_hora_termino }}
@@ -583,6 +583,13 @@ export default {
     }
   },
   methods: {
+    toTime(date) {
+      // Option 1
+      return new Date(date).toTimeString().substr(0,5)
+
+      // Option 2
+      //return date.substr(11,5)
+    }
     abreModalAdicionar() {
       this.errors = [];
       $("#modal_novo").modal("show");
