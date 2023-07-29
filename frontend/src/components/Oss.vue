@@ -43,10 +43,10 @@
                     {{ os.descricao_servico }}
                   </td>
                   <td>
-                    {{ os.data_hora_inicio }}
+                    {{ formataData(os.data_hora_inicio) }}
                   </td>
                   <td>
-                    {{ os.data_hora_termino }}
+                    {{ formataData(os.data_hora_termino) }}
                   </td>
                   <td>
                     {{ os.motorista }}
@@ -174,7 +174,7 @@
                     id="data_saida"
                     placeholder="Data de início do serviço"
                     class="form-control"
-                    v-model="os.data_inicio"
+                    v-model="os.data_saida"
                     v-mask="'##/##/####'"
                   />
                 </div>
@@ -186,31 +186,31 @@
                     id="hora_saida"
                     placeholder="Horario de saída do carro"
                     class="form-control"
-                    v-model="os.hora_inicio"
+                    v-model="os.hora_saida"
                     v-mask="'##:##'"
                   />
                 </div>
                 <div class="form-group">
-                  <label for="data_termino">Data de Término:</label>
+                  <label for="data_chegada">Data de Chegada:</label>
                   <input
                     type="text"
-                    name="data_termino"
+                    name="hora_chegada"
                     id="data_termino"
                     placeholder="Data de término do serviço"
                     class="form-control"
-                    v-model="os.data_termino"
+                    v-model="os.data_chegada"
                     v-mask="'##/##/####'"
                   />
                 </div>
                 <div class="form-group">
-                  <label for="hora_termino">Hora de Término:</label>
+                  <label for="hora_termino">Hora de Chegada:</label>
                   <input
                     type="text"
                     name="hora_termino"
                     id="hora_termino"
                     placeholder="Horario de termino do serviçoo"
                     class="form-control"
-                    v-model="os.hora_termino"
+                    v-model="os.hora_chegada"
                     v-mask="'##:##'"
                   />
                 </div>
@@ -385,7 +385,7 @@
                     id="data_saida"
                     placeholder="Data de início do serviço"
                     class="form-control"
-                    v-model="editar.data_inicio"
+                    v-model="editar.data_saida"
                     v-mask="'##/##/####'"
                   />
                 </div>
@@ -397,31 +397,31 @@
                     id="hora_saida"
                     placeholder="Horario de saída do carro"
                     class="form-control"
-                    v-model="editar.hora_inicio"
+                    v-model="editar.hora_saida"
                     v-mask="'##:##'"
                   />
                 </div>
                 <div class="form-group">
-                  <label for="data_termino">Data de Término:</label>
+                  <label for="data_chegada">Data de Término:</label>
                   <input
                     type="text"
-                    name="data_termino"
-                    id="data_termino"
+                    name="data_chegada"
+                    id="data_chegada"
                     placeholder="Data de término do serviço"
                     class="form-control"
-                    v-model="editar.data_termino"
+                    v-model="editar.data_chegada"
                     v-mask="'##/##/####'"
                   />
                 </div>
                 <div class="form-group">
-                  <label for="hora_termino">Hora de Término:</label>
+                  <label for="hora_chegada">Hora de Término:</label>
                   <input
                     type="text"
-                    name="hora_termino"
-                    id="hora_termino"
+                    name="hora_chegada"
+                    id="hora_chegada"
                     placeholder="Horario de termino do serviçoo"
                     class="form-control"
-                    v-model="editar.hora_termino"
+                    v-model="editar.hora_chegada"
                     v-mask="'##:##'"
                   />
                 </div>
@@ -506,29 +506,32 @@ export default {
         id_tiposervico: "",
         // descricao_servico: "",
         // locais: "",
-        data_hora_inicio:'',
-        data_inicio: "00/00/0000",
-        hora_inicio: "00:00",
-        data_termino: "00/00/0000",
-        hora_termino: "00:00"
+        //data_hora_inicio:'',
+        data_saida: "00/00/0000",
+        hora_saida: "00:00",
+        data_chegada: "00/00/0000",
+        hora_chegada: "00:00"
         // km_inicial: "",
         // km_final: "",
         // motorista: "",
         // status_os: ""
       },
       editar: {
-        id:"",
-        cliente: "",
-        navio: "",
-        id_tipo_servico: "",
-        descricao_servico: "",
-        locais: "",
-        data_hora_saida: "",
-        data_hora_termino: "",
-        km_inicial: "",
-        km_final: "",
-        motorista: "",
-        status_os: ""
+        //data_hora_inicio: this.e_exibeData(),
+        //id:"",
+        // cliente: "",
+        // navio: "",
+        // id_tipo_servico: "",
+        // descricao_servico: "",
+        // locais: "",
+        // data_saida: "dd/mm/yyyy",
+        // hora_inicio: "hh:mm",
+        // data_chegada:"dd/mm/yyyy",
+        // hora_chegada:"hh:mm",
+        // km_inicial: "",
+        // km_final: "",
+        // motorista: "",
+        // status_os: ""
       },
       pessoa:{
         id:"",
@@ -555,22 +558,47 @@ export default {
     this.exibeServicos();
   },
   computed:{
-    a_dt_inicio() {
-      let d_inicio = this.os.data_inicio.split("/");
-      return d_inicio[2] + "-" + d_inicio[1] + "-" + d_inicio[0];
+    a_dt_saida() {
+      if (this.os.data_saida !== "00/00/0000"){
+        let d_saida = this.os.data_saida.split("/");
+        let dt_saida = d_saida[2] + "-" + d_saida[1] + "-" + d_saida[0];
+        let data_hora_saida = dt_saida + " " + this.os.hora_saida + ":00";
+        return data_hora_saida;
+      }else{
+        return null;
+      }
     },
-    a_dt_termino() {
-      let d_termino = this.os.data_termino.split("/");
-      return d_termino[2] + "-" + d_termino[1] + "-" + d_termino[0];
+    a_dt_chegada() {
+      if (this.os.data_chegada != "00/00/0000"){
+        let d_chegada = this.os.data_chegada.split("/");
+        let data = d_chegada[2] + "-" + d_chegada[1] + "-" + d_chegada[0];
+        let data_hora_chegada = data + " " + this.os.hora_chegada + ":00"
+        return data_hora_chegada
+      }else{
+        return null;
+      }
     },
-    e_dt_inicio() {
-      let d_inicio = this.editar.data_inico.split("/");
-      return d_inicio[2] + "-" + d_inicio[1] + "-" + d_inicio[0];
-    },
-    e_dt_termino() {
-      let d_termino = this.editar.data_termino.split("/");
-      return d_termino[2] + "-" + d_termino[1] + "-" + d_termino[0];
-    },
+    // e_dt_inicio() {
+    //   if (this.os.data_chegada !== "00/00/0000"){
+    //     let d_saida = this.os.data_saida.split("/");
+    //     dt_saida = d_saida[2] + "-" + d_saida[1] + "-" + d_saida[0];
+    //     data_hora_saida = dt_saida + " " + this.os.hora_saida + ":00";
+    //     console.log(data_hora_saida)
+    //     return data_hora_saida;
+    //   }else{
+    //     return null;
+    //   }
+    // },
+    // e_dt_termino() {
+    //   if (this.os.data_chegada !== "00/00/0000"){
+    //     let d_chegada = this.os.data_chegada.split("/");
+    //     data = d_chegada[2] + "-" + d_chegada[1] + "-" + d_chegada[0];
+    //     data_hora_chegada = data + " " + this.os.hora_chegada + ":00"
+    //     return data_hora_chegada
+    //   }else{
+    //     return null;
+    //   }
+    // },
     ativarBotao() {
       if (
         this.os.apelido > 0 &&
@@ -583,6 +611,15 @@ export default {
     }
   },
   methods: {
+    formataData(param){
+      var data = new Date(param).toLocaleDateString('pt-br', { weekday:"short", year:"numeric", month:"short", day:"numeric", hour: ('numeric' || '2-digit'), minute: ('numeric' || '2-digit'),})
+      return data;
+    },
+    verificaData(){
+      if (this.a_dt_termino < this.a_dt_inicio){
+        alert("falhou!!!")
+      }
+    },
     abreModalAdicionar() {
       this.errors = [];
       $("#modal_novo").modal("show");
@@ -592,12 +629,30 @@ export default {
       //this.errors = [];
       $("#modal_editar").modal("show");
       this.editar = this.lista[index];
-      console.log(this.editar)
+      if(this.editar.data_hora_inicio != null){
+        this.editar.data_saida = new Date(this.editar.data_hora_inicio).toLocaleDateString('pt-br', {  year:"numeric", month:"numeric", day:"numeric"});
+        let hora = new Date(this.editar.data_hora_inicio).getHours();
+        let minuto = new Date(this.editar.data_hora_inicio).getMinutes()
+        this.editar.hora_saida = String(hora).padStart(2, "0")+":"+String(minuto).padStart(2, "0")
+      }else{
+        this.editar.data_saida = "00/00/0000"
+        this.editar.hora_saida = "00:00"
+      }
+      if (this.editar.data_hora_termino != null){
+        this.editar.data_chegada = new Date(this.editar.data_hora_termino).toLocaleDateString('pt-br', {  year:"numeric", month:"numeric", day:"numeric"});
+        let hora = new Date(this.editar.data_hora_termino).getHours();
+        let minuto = new Date(this.editar.data_hora_termino).getMinutes()
+        this.editar.hora_chegada = String(hora).padStart(2, "0")+":"+String(minuto).padStart(2, "0")
+      }else{
+        this.editar.data_chegada = "00/00/0000"
+        this.editar.hora_chegada = "00:00"
+      }
     },
     abreModalImprimir(index){
       $("#modal_imprimir").modal("show");
     },
     criaOS() {
+      //verificaData();
       axios
         .post("http://localhost:8000/api/oss", {
           id_pessoa: this.os.id_pessoa,
@@ -605,8 +660,8 @@ export default {
           id_tipo_servico: this.os.id_tiposervico,
           descricao_servico: this.os.descricao_servico,
           locais: this.os.lcoais,
-          data_hora_inicio: this.a_dt_inicio + " " + this.os.hora_inicio + ":00",
-          data_hora_termino: this.a_dt_termino + " " + this.os.hora_termino + ":00",
+          data_hora_inicio: this.a_dt_saida, 
+          data_hora_termino: this.a_dt_chegada,
           km_inicial: this.os.km_inicial,
           km_final: this.os.km_final,
           id_motorista: this.os.id_motorista,
@@ -641,6 +696,7 @@ export default {
         // 
     },
     EditaOS(){
+      verificaData();
       axios
         .patch("http://localhost:8000/api/oss/" + this.editar.id, {
           id_pessoa: this.editar.id_pessoa,
@@ -648,8 +704,8 @@ export default {
           id_tipo_servico: this.editar.id_tipo_servico,
           descricao_servico: this.editar.descricao_servico,
           locais: this.editar.locais,
-          data_hora_inicio: this.e_dt_inicio + " " + this.os.hora_inicio + ":00",
-          data_hora_termino: this.e_dt_termino + " " + this.os.hora_termino + ":00",
+          data_hora_inicio: this.a_dt_inicio, 
+          data_hora_termino: this.a_dt_termino, 
           km_inicial: this.editar.km_inicial,
           km_final: this.editar.km_final,
           motorista: this.editar.motorista,
