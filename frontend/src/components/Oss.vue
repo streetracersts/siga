@@ -40,10 +40,14 @@
                     {{ os.tipo }}
                   </td>
                   <td>
-                    {{ os.descricao_servico }}
+                    {{ toTime(os.descricao_servico) }}
                   </td>
                   <td>
+<<<<<<< HEAD
                     {{ formataData(os.data_hora_inicio) }}
+=======
+                    {{ toTime(os.data_hora_inicio) }}
+>>>>>>> e409683f0fd1ecdb5e8cbb27fe061ca987dfe3a0
                   </td>
                   <td>
                     {{ formataData(os.data_hora_termino) }}
@@ -620,6 +624,7 @@ export default {
         alert("falhou!!!")
       }
     },
+
     abreModalAdicionar() {
       this.errors = [];
       $("#modal_novo").modal("show");
