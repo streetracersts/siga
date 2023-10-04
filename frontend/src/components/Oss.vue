@@ -40,17 +40,17 @@
                     {{ os.tipo }}
                   </td>
                   <td>
-                    {{ toTime(os.descricao_servico) }}
+                    {{ os.descricao_servico }}
                   </td>
-                  <td>
-<<<<<<< HEAD
+                  <td v-if = 'os.data_hora_inicio != null'>
                     {{ formataData(os.data_hora_inicio) }}
-=======
-                    {{ toTime(os.data_hora_inicio) }}
->>>>>>> e409683f0fd1ecdb5e8cbb27fe061ca987dfe3a0
                   </td>
-                  <td>
+                  <td v-else-if='os.data_hora_inicio == null'>
+                  </td>
+                  <td v-if = 'os.data_hora_termino != null'>
                     {{ formataData(os.data_hora_termino) }}
+                  </td>
+                  <td v-else-if='os.data_hora_termino == null'>
                   </td>
                   <td>
                     {{ os.motorista }}
@@ -240,6 +240,18 @@
                     v-model="os.km_final"
                   />
                 </div>
+                <div class="form-group">
+                  <label for="obs">Observações:</label>
+                  <textarea
+                    type="text"
+                    name="obs"
+                    id="obs"
+                    placeholder="Observações sobre a viagem"
+                    class="form-control"
+                    v-model="os.obs"
+                  >
+                  </textarea>
+                </div>
                 <div class="form-group col-md-6">
                   <label for="motorista">Motorista:</label>
                   <select
@@ -371,7 +383,7 @@
                 </div>
                 <div class="form-group">
                   <label for="Locais">Locais:</label>
-                  <textarea
+                  <textarea v-on:blur="separaLocais()"
                     name="locais"
                     id="locais"
                     cols="30"
@@ -452,15 +464,32 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="motorista">Motorista:</label>
-                  <input
+                  <label for="obs">Observações:</label>
+                  <textarea
                     type="text"
+                    name="obs"
+                    id="obs"
+                    placeholder="Observações sobre a viagem"
+                    class="form-control"
+                    v-model="editar.obs"
+                  >
+                  </textarea>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="motorista">Motorista:</label>
+                  <select
                     name="motorista"
                     id="motorista"
-                    placeholder=""
-                    class="form-control"
-                    v-model="editar.motorista"
-                  />
+                    v-model="editar.id_motorista"
+                  >
+                    <option disabled value>Selecione um motorista</option>
+                    <option
+                      v-for="item in pessoa"
+                      :key="item.id"
+                      :value="item.id"
+                      >{{ item.apelido }}</option
+                    >
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="ststus">Status do Trabalho:</label>
@@ -504,38 +533,38 @@ export default {
   data() {
     return {
       os: {
-        // id:"",
+        id:"",
         cliente: "",
         navio: "",
         id_tiposervico: "",
-        // descricao_servico: "",
-        // locais: "",
-        //data_hora_inicio:'',
+        descricao_servico: "",
+        locais: "",
+        data_hora_inicio:"",
+        data_hora_termino:"",
         data_saida: "00/00/0000",
         hora_saida: "00:00",
         data_chegada: "00/00/0000",
-        hora_chegada: "00:00"
-        // km_inicial: "",
-        // km_final: "",
-        // motorista: "",
-        // status_os: ""
+        hora_chegada: "00:00",
+        km_inicial: "",
+        km_final: "",
+        obs:"",
+        motorista: "",
+        status_os: ""
       },
       editar: {
-        //data_hora_inicio: this.e_exibeData(),
-        //id:"",
-        // cliente: "",
-        // navio: "",
-        // id_tipo_servico: "",
-        // descricao_servico: "",
-        // locais: "",
-        // data_saida: "dd/mm/yyyy",
-        // hora_inicio: "hh:mm",
-        // data_chegada:"dd/mm/yyyy",
-        // hora_chegada:"hh:mm",
-        // km_inicial: "",
-        // km_final: "",
-        // motorista: "",
-        // status_os: ""
+        id:"",
+        cliente: "",
+        navio: "",
+        id_tipo_servico: "",
+        descricao_servico: "",
+        locais: "",
+        data_hora_inicio: "",
+        data_hora_termino: "",
+        km_inicial: "",
+        km_final: "",
+        motorista: "",
+        obs:"",
+        status_os: ""
       },
       pessoa:{
         id:"",
@@ -566,8 +595,8 @@ export default {
       if (this.os.data_saida !== "00/00/0000"){
         let d_saida = this.os.data_saida.split("/");
         let dt_saida = d_saida[2] + "-" + d_saida[1] + "-" + d_saida[0];
-        let data_hora_saida = dt_saida + " " + this.os.hora_saida + ":00";
-        return data_hora_saida;
+        let data_hora_inicio = dt_saida + " " + this.os.hora_saida + ":00";
+        return data_hora_inicio;
       }else{
         return null;
       }
@@ -576,33 +605,32 @@ export default {
       if (this.os.data_chegada != "00/00/0000"){
         let d_chegada = this.os.data_chegada.split("/");
         let data = d_chegada[2] + "-" + d_chegada[1] + "-" + d_chegada[0];
-        let data_hora_chegada = data + " " + this.os.hora_chegada + ":00"
-        return data_hora_chegada
+        let data_hora_termino = data + " " + this.os.hora_chegada + ":00"
+        return data_hora_termino;
       }else{
         return null;
       }
     },
-    // e_dt_inicio() {
-    //   if (this.os.data_chegada !== "00/00/0000"){
-    //     let d_saida = this.os.data_saida.split("/");
-    //     dt_saida = d_saida[2] + "-" + d_saida[1] + "-" + d_saida[0];
-    //     data_hora_saida = dt_saida + " " + this.os.hora_saida + ":00";
-    //     console.log(data_hora_saida)
-    //     return data_hora_saida;
-    //   }else{
-    //     return null;
-    //   }
-    // },
-    // e_dt_termino() {
-    //   if (this.os.data_chegada !== "00/00/0000"){
-    //     let d_chegada = this.os.data_chegada.split("/");
-    //     data = d_chegada[2] + "-" + d_chegada[1] + "-" + d_chegada[0];
-    //     data_hora_chegada = data + " " + this.os.hora_chegada + ":00"
-    //     return data_hora_chegada
-    //   }else{
-    //     return null;
-    //   }
-    // },
+    e_dt_saida() {
+      if (this.editar.data_chegada !== "00/00/0000"){
+        let d_saida = this.editar.data_saida.split("/");
+        let dt_saida = d_saida[2] + "-" + d_saida[1] + "-" + d_saida[0];
+        let data_hora_inicio = dt_saida + " " + this.editar.hora_saida + ":00";
+        return data_hora_inicio;
+      }else{
+        return null;
+      }
+    },
+    e_dt_chegada() {
+      if (this.editar.data_chegada !== "00/00/0000"){
+        let d_chegada = this.editar.data_chegada.split("/");
+        let data = d_chegada[2] + "-" + d_chegada[1] + "-" + d_chegada[0];
+        let data_hora_termino = data + " " + this.editar.hora_chegada + ":00"
+        return data_hora_termino
+      }else{
+        return null;
+      }
+    },
     ativarBotao() {
       if (
         this.os.apelido > 0 &&
@@ -615,22 +643,18 @@ export default {
     }
   },
   methods: {
+    separaLocais(){
+        let arrayLocais = this.editar.locais.split("\n");
+    },
     formataData(param){
       var data = new Date(param).toLocaleDateString('pt-br', { weekday:"short", year:"numeric", month:"short", day:"numeric", hour: ('numeric' || '2-digit'), minute: ('numeric' || '2-digit'),})
       return data;
     },
-    verificaData(){
-      if (this.a_dt_termino < this.a_dt_inicio){
-        alert("falhou!!!")
-      }
-    },
-
     abreModalAdicionar() {
       this.errors = [];
       $("#modal_novo").modal("show");
     },
     abreModalEditar(index) {
-      console.log(index);
       //this.errors = [];
       $("#modal_editar").modal("show");
       this.editar = this.lista[index];
@@ -657,18 +681,19 @@ export default {
       $("#modal_imprimir").modal("show");
     },
     criaOS() {
-      //verificaData();
+      var arrayLocais = this.os.locais.split("\n");
       axios
         .post("http://localhost:8000/api/oss", {
           id_pessoa: this.os.id_pessoa,
           id_navio: this.os.id_navio,
           id_tipo_servico: this.os.id_tiposervico,
           descricao_servico: this.os.descricao_servico,
-          locais: this.os.lcoais,
+          //locais: this.os.lcoais,
           data_hora_inicio: this.a_dt_saida, 
           data_hora_termino: this.a_dt_chegada,
           km_inicial: this.os.km_inicial,
           km_final: this.os.km_final,
+          obs: this.os.obs,
           id_motorista: this.os.id_motorista,
           status_os: 1,
         })
@@ -676,12 +701,23 @@ export default {
           this.lista.push(response.data.os);
           this.msgs.push(response.data.message);
           this.os.id = response.data.os.id;
+          console.log(this.os.locais);
+          if (this.os.locais != ""){
+            var id_os = this.os.id
+            var arrayLocais = this.os.locais.split("\n");
+            this.atualizaLocais(id_os, arrayLocais);
+          }
           axios
           .post('http://localhost:8000/api/oshaspessoas',{
             id_os: this.os.id,
             id_pessoa: this.os.id_pessoa
+          }).then(response => {
+
+          }).catch(error =>{
+            console.log(error);
           });
           this.limpaCampos();
+          this.exibeOss();
           $("#cliente").trigger("focus");
 
           // axios.post('http://localhost:8000/api/oshaspessoas',{
@@ -701,23 +737,38 @@ export default {
         // 
     },
     EditaOS(){
-      verificaData();
       axios
         .patch("http://localhost:8000/api/oss/" + this.editar.id, {
           id_pessoa: this.editar.id_pessoa,
           id_navio: this.editar.id_navio,
           id_tipo_servico: this.editar.id_tipo_servico,
           descricao_servico: this.editar.descricao_servico,
-          locais: this.editar.locais,
-          data_hora_inicio: this.a_dt_inicio, 
-          data_hora_termino: this.a_dt_termino, 
+          //locais: this.editar.locais,
+          data_hora_inicio: this.e_dt_saida, 
+          data_hora_termino: this.e_dt_chegada, 
           km_inicial: this.editar.km_inicial,
           km_final: this.editar.km_final,
-          motorista: this.editar.motorista,
+          obs: this.editar.obs,
+          id_motorista: this.editar.id_motorista,
           status_os: 2,
         })
         .then(response => {
-          alert("Registro atualizado com sucesso.");
+          let id_os = this.editar.id;
+          let arrayLocais = this.editar.locais.split("\n");
+          this.atualizaLocais(id_os, arrayLocais);
+          //console.log(response.data.os);
+          this.msgs.push(response.data.message);
+          //$("#modal_editar").modal("hide");
+          //console.log(response.data.os.id);
+          //console.log(response.data.os);
+          //console.log(this.lista);
+          //let val = response.data.os;
+          //console.log(val);
+          this.exibeOss();
+          //this.$set(this.lista, response.data.os.id - 1, response.data.os)
+          //this.lista[response.data.os.id] = response.data.os;
+          //this.msgs.push(response.data.message);
+          //this.limpaCampos();
           $("#modal_editar").modal("hide");
         })
         .catch(error => {
@@ -742,6 +793,7 @@ export default {
       (this.os.hora_termino = ""),
       (this.os.km_inicial = ""),
       (this.os.km_final = ""),
+      (this.os.obs),
       (this.os.motorista = ""),
       (this.os.status = "");
     },
@@ -786,15 +838,95 @@ export default {
       })
     },
     excluiOs(index) {
-      let conf = confirm("Deseja mesmo remover esta os?" );
+      let conf = confirm("Deseja mesmo remover esta os?");
       if (conf === true) {
         axios
-          .delete("http://localhost:8000/api/oss/" + this .lista[index].id)
+          .delete("http://localhost:8000/api/oss/" + this.lista[index].id)
           .then(response => {
             this.lista.splice(index, 1);
           })
           .catch(error => {});
       }
+    },
+    atualizaLocais(id_os,locais){
+      console.log(id_os);
+      console.log(locais);
+      if (id_os != null){ 
+        for (let i=0; i < locais.length; i++){
+          axios
+          .post("http://localhost:8000/api/locais", {
+            nome_local: locais[i]
+          })
+          .then(response => {
+            console.log(this.editar.id);
+            console.log(response.data.local);
+            axios
+            .post('http://localhost:8000/api/oshaslocais',{
+              id_os: this.editar.id,
+              id_local: response.data.local
+            }).then(response => {
+              console.log("os has locais");
+            }).catch(error=>{
+              console.log("os has not locais");
+            });
+          })
+          .catch(error => {
+            // this.errors = [];
+            // if (error.response.data.errors.name) {
+            //   this.errors.push(error.response.data.errors.name[0]);
+            // }
+
+            // if (error.response.data.errors.description) {
+            //   this.errors.push(error.response.data.errors.description[0]);
+            // }
+          });
+        } 
+      }else{
+        for (let i=0; i < locais.length; i++){
+          axios
+          .post("http://localhost:8000/api/locais", {
+            nome_local: locais[i]
+          })
+          .then(response => {
+            // console.log(this.editar.id);
+            // console.log(response.data.local);
+            axios
+            .post('http://localhost:8000/api/oshaslocais',{
+              id_os: this.os.id,
+              id_local: response.os.local
+            });
+          })
+          .catch(error => {
+            // this.errors = [];
+            // if (error.response.data.errors.name) {
+            //   this.errors.push(error.response.data.errors.name[0]);
+            // }
+
+            // if (error.response.data.errors.description) {
+            //   this.errors.push(error.response.data.errors.description[0]);
+            // }
+          });
+        }
+      }
+    },
+    limpaCampos() {
+      const keys = Object.keys(this.os);
+      keys.forEach(key => (this.os[key] = ""));
+      this.os.apelido = 0;
+      this.os.nome = 0;
+      this.os.tipo = 0;
+      this.esconde_alerta();
+      this.errors.clear();
+      $(".form-control.invalido").removeClass("invalido");
+    },
+    esconde_alerta() {
+      setTimeout(() => {
+        $(".alert").alert("close");
+      }, 7000);
+    },
+    fecharModal() {
+      this.limpaCampos();
+      $("#modal_novo").modal("hide");
     }
   },
 };

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Os;
 use Illuminate\Http\Request;
-use Auth;
+//use Auth;
 
 class OsController extends Controller
 {
@@ -79,7 +79,7 @@ class OsController extends Controller
      */
     public function edit(os $os)
     {
-        //
+        
     }
 
     /**
@@ -89,9 +89,15 @@ class OsController extends Controller
      * @param  \App\os  $os
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, os $os)
-    {
-        //
+    public function update(Request $request, $id)
+    {   
+        $os = Os::findOrFail($id);
+        $os->update($request->all());
+        //return $company;
+        return response()->json([
+            'os' => $os,
+            'message' => 'Registro atualizado com sucesso!'
+        ], 200);
     }
 
     /**

@@ -4,8 +4,9 @@ Auth::routes();
 Route::view('/', 'welcome');
 Route::view('pessoas', 'pessoas');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/exibepessoas', 'PessoaController@index');
-Route::post('/armazenarpessoa', 'PessoaController@store');
+//Route::get('/exibepessoas', 'PessoaController@index');
+//Route::post('/armazenarpessoa', 'PessoaController@store');
+//Route::post('/armazenaos')
 
 Auth::routes();
 

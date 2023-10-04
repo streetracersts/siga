@@ -40,6 +40,8 @@ Route::resource('/pessoa', 'PessoaController');
 Route::resource("/navios", "NavioController");
 Route::resource("/oss", "OsController");
 Route::resource("/oshaspessoas", "OsHasPessoasController");
+Route::resource("/locais", "LocalController");
+Route::resource("/oshaslocais","OsHasLocaisController");
 //Route::get('exibeoss', [OS::class, 'index']);
 Route::post('cadastrapessoa', 'PessoaController@store');
 Route::post('cadastratipopessoa', 'TipoPessoaController@store');

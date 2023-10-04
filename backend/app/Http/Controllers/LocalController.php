@@ -47,7 +47,7 @@ class LocalController extends Controller
             'long' => request('long')
         ]);
         return response()->json([
-            'local'    => $local,
+            'local'    => $local["id"],
             'message' => 'Local cadastrado'
         ], 200);
     }
