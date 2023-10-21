@@ -6,6 +6,21 @@ use Illuminate\Http\Request;
 
 class OsHasLocaisController extends Controller
 { 
+    public function show(Request $request, $id)
+    {
+        $locaisos = OsHasLocais::Join('locais', 'os_has_locais.id_local', '=', 'locais.id')
+        ->where('os_has_locais.id_os', "=", $id)
+        ->get(['locais.nome_local']);
+        
+    
+        {return response()->json(
+           $locaisos);
+        }
+        // $locais = OsHasLocais::All();
+        // return response()->json([
+        //     'locais' => $locais,
+        // ], 200);
+    }
     public function store(Request $request)
     {
         $this->validate($request, [

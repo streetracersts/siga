@@ -93,7 +93,7 @@
           <div class="modal-body">
             <div class="alert alert-danger" v-if="errors.length > 0">
               <ul>
-                <li v-for="error in errors">{{ error }}</li>
+                <li v-for="(error, index) in errors" :key="'erro1-'+index">{{ error }}</li>
               </ul>
             </div>
             <div class="row">
@@ -316,7 +316,7 @@
           <div class="modal-body">
             <div class="alert alert-danger" v-if="errors.length > 0">
               <ul>
-                <li v-for="error in errors">{{ error }}</li>
+                <li v-for="(error, index ) in errors" :key="'erro-'+index">{{ error }}</li>
               </ul>
             </div>
             <div class="row">
@@ -492,7 +492,7 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="ststus">Status do Trabalho:</label>
+                  <label for="status">Status do Trabalho:</label>
                   <input
                     type="text"
                     name="status"
@@ -643,9 +643,6 @@ export default {
     }
   },
   methods: {
-    separaLocais(){
-        let arrayLocais = this.editar.locais.split("\n");
-    },
     formataData(param){
       var data = new Date(param).toLocaleDateString('pt-br', { weekday:"short", year:"numeric", month:"short", day:"numeric", hour: ('numeric' || '2-digit'), minute: ('numeric' || '2-digit'),})
       return data;
@@ -655,9 +652,12 @@ export default {
       $("#modal_novo").modal("show");
     },
     abreModalEditar(index) {
-      //this.errors = [];
       $("#modal_editar").modal("show");
-      this.editar = this.lista[index];
+      console.log('roula')
+      console.log(this.lista[index]);
+      this.editar = {
+        ...this.editar,
+        ...this.lista[index]};
       if(this.editar.data_hora_inicio != null){
         this.editar.data_saida = new Date(this.editar.data_hora_inicio).toLocaleDateString('pt-br', {  year:"numeric", month:"numeric", day:"numeric"});
         let hora = new Date(this.editar.data_hora_inicio).getHours();
@@ -676,12 +676,12 @@ export default {
         this.editar.data_chegada = "00/00/0000"
         this.editar.hora_chegada = "00:00"
       }
+      this.exibeLocaisOs();
     },
     abreModalImprimir(index){
       $("#modal_imprimir").modal("show");
     },
     criaOS() {
-      var arrayLocais = this.os.locais.split("\n");
       axios
         .post("http://localhost:8000/api/oss", {
           id_pessoa: this.os.id_pessoa,
@@ -753,9 +753,11 @@ export default {
           status_os: 2,
         })
         .then(response => {
-          let id_os = this.editar.id;
-          let arrayLocais = this.editar.locais.split("\n");
-          this.atualizaLocais(id_os, arrayLocais);
+          if (this.editar.locais != ""){
+            let id_os = this.editar.id;
+            let arrayLocais = this.editar.locais.split("\n");
+            this.atualizaLocais(id_os, arrayLocais);
+          }
           //console.log(response.data.os);
           this.msgs.push(response.data.message);
           //$("#modal_editar").modal("hide");
@@ -817,6 +819,14 @@ export default {
         this.lista = response.data;
       });
     },
+    exibeLocaisOs() {
+      axios.get("http://localhost:8000/api/oshaslocais/"+this.editar.id).then(response =>{
+        response.data.forEach((local) => {
+          console.log(local.nome_local);
+          this.editar.locais += local.nome_local + "\n";
+        });
+      });
+    },
     exibePessoas() {
       axios.get("http://localhost:8000/api/pessoa").then(response => {
         this.pessoa = response.data;
@@ -851,7 +861,7 @@ export default {
     atualizaLocais(id_os,locais){
       console.log(id_os);
       console.log(locais);
-      if (id_os != null){ 
+     // if (locais.length > 0 ){ 
         for (let i=0; i < locais.length; i++){
           axios
           .post("http://localhost:8000/api/locais", {
@@ -881,33 +891,33 @@ export default {
             // }
           });
         } 
-      }else{
-        for (let i=0; i < locais.length; i++){
-          axios
-          .post("http://localhost:8000/api/locais", {
-            nome_local: locais[i]
-          })
-          .then(response => {
-            // console.log(this.editar.id);
-            // console.log(response.data.local);
-            axios
-            .post('http://localhost:8000/api/oshaslocais',{
-              id_os: this.os.id,
-              id_local: response.os.local
-            });
-          })
-          .catch(error => {
-            // this.errors = [];
-            // if (error.response.data.errors.name) {
-            //   this.errors.push(error.response.data.errors.name[0]);
-            // }
+      // }else{
+      //   for (let i=0; i < locais.length; i++){
+      //     axios
+      //     .post("http://localhost:8000/api/locais", {
+      //       nome_local: locais[i]
+      //     })
+      //     .then(response => {
+      //       // console.log(this.editar.id);
+      //       // console.log(response.data.local);
+      //       axios
+      //       .post('http://localhost:8000/api/oshaslocais',{
+      //         id_os: this.os.id,
+      //         id_local: response.os.local
+      //       });
+      //     })
+      //     .catch(error => {
+      //       // this.errors = [];
+      //       // if (error.response.data.errors.name) {
+      //       //   this.errors.push(error.response.data.errors.name[0]);
+      //       // }
 
-            // if (error.response.data.errors.description) {
-            //   this.errors.push(error.response.data.errors.description[0]);
-            // }
-          });
-        }
-      }
+      //       // if (error.response.data.errors.description) {
+      //       //   this.errors.push(error.response.data.errors.description[0]);
+      //       // }
+      //     });
+      //   }
+      //}
     },
     limpaCampos() {
       const keys = Object.keys(this.os);
