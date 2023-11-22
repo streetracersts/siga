@@ -158,6 +158,43 @@
                     v-model="os.descricao_servico"
                   ></textarea>
                 </div>
+                <div class="form-group col-md-3">
+                  <label for="a_nome_passageiro">Nome do/s passageiro/s:</label>
+                  <input
+                    ref="a_nome_passageiro"
+                    name="a_nome_passageiro"
+                    id="a_nome_passageiro"
+                    class="form-control"
+                  />
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="doc_passageiro">Documento:</label>
+                  <input
+                    ref="a_doc_passageiro"
+                    name="doc_passageiro"
+                    id="doc_passageiro"
+                    class="form-control"
+                  />
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="tel_passageiro">Telefone:</label>
+                  <input
+                    ref = "a_tel_passageiro"
+                    name="tel_passageiro"
+                    id="tel_passageiro"
+                    class="form-control"
+                  />
+                </div>
+                <button @click="adicionaPassageiro()" type="button" class="add_passageiro" aria-label="Plus_pass">
+                  <span aria-hidden="true">&plus;</span>
+                </button>   
+                <table ref="lista_passageiros" id="lista_passageiros" class="col-md-12">
+                    <tr>
+                      <th>Nome Passageiro</th>
+                      <th>Documento</th>
+                      <th>Telefone</th>
+                    </tr>
+                </table>  
                 <div class="form-group">
                   <label for="Locais">Locais:</label>
                   <textarea
@@ -303,7 +340,9 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
+            <h4 class="modal-title">Editar OS</h4>
             <button
+              @click="fecharModal"
               type="button"
               class="close"
               data-dismiss="modal"
@@ -311,7 +350,6 @@
             >
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">Editar OS</h4>
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" v-if="errors.length > 0">
@@ -379,6 +417,18 @@
                     class="form-control"
                     placeholder="Descrição do serviço"
                     v-model="editar.descricao_servico"
+                  ></textarea>
+                </div>
+                <div class="form-group col-md-12">
+                  <label for="passageiros">Nome do/s passageiro/s:</label>
+                  <textarea
+                    name="passageiros"
+                    id="passageiros"
+                    cols="30"
+                    rows="5"
+                    class="form-control"
+                    placeholder="Nome do/s passageiro/s"
+                    v-model="os.passageiros"
                   ></textarea>
                 </div>
                 <div class="form-group">
@@ -538,6 +588,7 @@ export default {
         navio: "",
         id_tiposervico: "",
         descricao_servico: "",
+        passageiros: [],
         locais: "",
         data_hora_inicio:"",
         data_hora_termino:"",
@@ -557,6 +608,7 @@ export default {
         navio: "",
         id_tipo_servico: "",
         descricao_servico: "",
+        passageiros: [],
         locais: "",
         data_hora_inicio: "",
         data_hora_termino: "",
@@ -653,8 +705,6 @@ export default {
     },
     abreModalEditar(index) {
       $("#modal_editar").modal("show");
-      console.log('roula')
-      console.log(this.lista[index]);
       this.editar = {
         ...this.editar,
         ...this.lista[index]};
@@ -766,12 +816,12 @@ export default {
           //console.log(this.lista);
           //let val = response.data.os;
           //console.log(val);
-          this.exibeOss();
+          this.exibeOss();//chama exibir os para atualizar os campos na tabela html.
           //this.$set(this.lista, response.data.os.id - 1, response.data.os)
           //this.lista[response.data.os.id] = response.data.os;
           //this.msgs.push(response.data.message);
           //this.limpaCampos();
-          $("#modal_editar").modal("hide");
+          this.fecharModal();
         })
         .catch(error => {
           this.errors = [];
@@ -783,37 +833,6 @@ export default {
           }
         });
     },
-    reset() {
-      (this.os.cliente = ""),
-      (this.os.navio = ""),
-      (this.os.tipo_servico = ""),
-      (this.os.descricao_servico = ""),
-      (this.os.locais = ""),
-      (this.os.data_inicio = ""),
-      (this.os.hora_inicio = ""),
-      (this.os.data_termino = ""),
-      (this.os.hora_termino = ""),
-      (this.os.km_inicial = ""),
-      (this.os.km_final = ""),
-      (this.os.obs),
-      (this.os.motorista = ""),
-      (this.os.status = "");
-    },
-    // reset() {
-    //   (this.os.cliente = ""),
-    //   (this.os.navio = ""),
-    //   (this.os.tipo_servico = ""),
-    //   (this.os.descricao_servico = ""),
-    //   (this.os.locais = ""),
-    //   (this.os.data_inicio = ""),
-    //   (this.os.hora_inicio = ""),
-    //   (this.os.data_termino = ""),
-    //   (this.os.hora_termino = ""),
-    //   (this.os.km_inicial = ""),
-    //   (this.os.km_final = ""),
-    //   (this.os.motorista = ""),
-    //   (this.os.status = "");
-    // },
     exibeOss() {
       axios.get("http://localhost:8000/api/oss").then(response => {
         this.lista = response.data;
@@ -857,6 +876,19 @@ export default {
           })
           .catch(error => {});
       }
+    },
+    adicionaPassageiro(){
+      const passageiro = [];
+      passageiro.push(this.$refs.a_nome_passageiro.value);
+      passageiro.push(this.$refs.a_doc_passageiro.value);
+      passageiro.push(this.$refs.a_tel_passageiro.value);
+      console.log(passageiro[0]);
+      this.os.passageiros.push(passageiro);
+      this.$refs.lista_passageiros.innerHTML += '<tr><td>'+passageiro[0]+'</td><td>'+passageiro[1]+'</td><td>'+passageiro[1]+'</td><td><button @click="removePassageiro()" type="button" class="rem_passageiro" aria-label="rem_pass"><span aria-hidden="true">&minus;</span></button></td></tr>'
+      this.$refs.a_nome_passageiro.value = "";
+      this.$refs.a_doc_passageiro.value = "";
+      this.$refs.a_tel_passageiro.value = "";
+      console.log(this.os.passageiros);
     },
     atualizaLocais(id_os,locais){
       console.log(id_os);
@@ -919,6 +951,23 @@ export default {
       //   }
       //}
     },
+    reset() {
+      (this.editar.status = "");
+      (this.editar.cliente = ""),
+      (this.editar.navio = ""),
+      (this.editar.tipo_servico = ""),
+      (this.editar.descricao_servico = ""),
+      (this.editar.locais = ""),
+      (this.editar.data_inicio = ""),
+      (this.editar.hora_inicio = ""),
+      (this.editar.data_termino = ""),
+      (this.editar.hora_termino = ""),
+      (this.editar.km_inicial = ""),
+      (this.editar.km_final = ""),
+      (this.editar.obs),
+      (this.editar.motorista = ""),
+      (this.editar.status = "");
+    },
     limpaCampos() {
       const keys = Object.keys(this.os);
       keys.forEach(key => (this.os[key] = ""));
@@ -935,7 +984,9 @@ export default {
       }, 7000);
     },
     fecharModal() {
+      this.reset();
       this.limpaCampos();
+      $('#modal_editar').modal("hide");
       $("#modal_novo").modal("hide");
     }
   },
