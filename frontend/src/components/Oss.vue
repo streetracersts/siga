@@ -197,7 +197,7 @@
                 </table>  
                 <div class="form-group">
                   <label for="Locais">Locais:</label>
-                  <textarea
+                  <textarea v-on:blur="separaLocais"
                     name="locais"
                     id="locais"
                     cols="30"
@@ -433,7 +433,7 @@
                 </div>
                 <div class="form-group">
                   <label for="Locais">Locais:</label>
-                  <textarea v-on:blur="separaLocais()"
+                  <textarea v-on:blur="separaLocais"
                     name="locais"
                     id="locais"
                     cols="30"
@@ -695,6 +695,11 @@ export default {
     }
   },
   methods: {
+    separaLocais(){
+        const a_locais  = [];
+        a_locais = this.editar.locais.split("\n");
+        console.log(a_locais);
+    },
     formataData(param){
       var data = new Date(param).toLocaleDateString('pt-br', { weekday:"short", year:"numeric", month:"short", day:"numeric", hour: ('numeric' || '2-digit'), minute: ('numeric' || '2-digit'),})
       return data;
@@ -738,7 +743,8 @@ export default {
           id_navio: this.os.id_navio,
           id_tipo_servico: this.os.id_tiposervico,
           descricao_servico: this.os.descricao_servico,
-          //locais: this.os.lcoais,
+          passageiros: this.os.passageiros,
+          locais: this.os.lcoais,
           data_hora_inicio: this.a_dt_saida, 
           data_hora_termino: this.a_dt_chegada,
           km_inicial: this.os.km_inicial,
@@ -884,11 +890,14 @@ export default {
       passageiro.push(this.$refs.a_tel_passageiro.value);
       console.log(passageiro[0]);
       this.os.passageiros.push(passageiro);
-      this.$refs.lista_passageiros.innerHTML += '<tr><td>'+passageiro[0]+'</td><td>'+passageiro[1]+'</td><td>'+passageiro[1]+'</td><td><button @click="removePassageiro()" type="button" class="rem_passageiro" aria-label="rem_pass"><span aria-hidden="true">&minus;</span></button></td></tr>'
+      this.$refs.lista_passageiros.innerHTML += '<tr><td>'+passageiro[0]+'</td><td>'+passageiro[1]+'</td><td>'+passageiro[1]+'</td><td><button @click="removePassageiro(index)" type="button" class="rem_passageiro" aria-label="rem_pass"><span aria-hidden="true">&minus;</span></button></td></tr>'
       this.$refs.a_nome_passageiro.value = "";
       this.$refs.a_doc_passageiro.value = "";
       this.$refs.a_tel_passageiro.value = "";
       console.log(this.os.passageiros);
+    },
+    removePassageiro(){
+      this.$delete(this.os.passageiros, index)
     },
     atualizaLocais(id_os,locais){
       console.log(id_os);
