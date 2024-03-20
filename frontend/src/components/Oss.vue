@@ -799,7 +799,7 @@ export default {
           id_navio: this.editar.id_navio,
           id_tipo_servico: this.editar.id_tipo_servico,
           descricao_servico: this.editar.descricao_servico,
-          //locais: this.editar.locais,
+          locais: this.editar.locais,
           data_hora_inicio: this.e_dt_saida, 
           data_hora_termino: this.e_dt_chegada, 
           km_inicial: this.editar.km_inicial,
